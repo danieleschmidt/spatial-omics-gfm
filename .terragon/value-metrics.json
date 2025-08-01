@@ -1,0 +1,31 @@
+{
+  "repository": {
+    "name": "spatial-omics-gfm",
+    "maturity": "nascent",
+    "maturityScore": 25,
+    "lastAssessment": "2025-08-01T02:38:05.782684+00:00"
+  },
+  "executionHistory": [],
+  "backlogMetrics": {
+    "totalItems": 8,
+    "averageAge": 0,
+    "debtRatio": 0.85,
+    "velocityTrend": "initial",
+    "averageScore": 3.0575,
+    "lastDiscovery": "2025-08-01T02:38:05.782666+00:00"
+  },
+  "continuousDiscovery": {
+    "enabled": true,
+    "lastRun": null,
+    "nextScheduled": "immediate"
+  },
+  "valueScoring": {
+    "model": "hybrid_wsjf_ice_debt",
+    "weights": {
+      "wsjf": 0.4,
+      "ice": 0.3,
+      "technicalDebt": 0.2,
+      "security": 0.1
+    }
+  }
+}
