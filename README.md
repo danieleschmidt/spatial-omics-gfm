@@ -31,7 +31,7 @@ pip install spatial-omics-gfm[viz]
 pip install spatial-omics-gfm[full]
 
 # Development
-git clone https://github.com/yourusername/spatial-omics-gfm
+git clone https://github.com/danieleschmidt/spatial-omics-gfm
 cd spatial-omics-gfm
 pip install -e ".[dev]"
 ```
@@ -955,7 +955,7 @@ if diagnostic.predict_memory_usage(model, dataset) > available_memory:
 ```bibtex
 @article{spatial_omics_gfm,
   title={Spatial-Omics GFM: A Graph Foundation Model for Spatial Transcriptomics},
-  author={Your Name},
+  author={Daniel Schmidt},
   journal={Nature Methods},
   year={2025},
   doi={10.1038/nmeth.2025.xxxxx}
@@ -980,5 +980,5 @@ This project is licensed under the MIT License - see [LICENSE](LICENSE) for deta
 
 - [Documentation](https://spatial-omics-gfm.readthedocs.io)
 - [Model Zoo](https://huggingface.co/spatial-omics-gfm)
-- [Tutorials](https://github.com/yourusername/spatial-omics-gfm/tutorials)
+- [Tutorials](https://github.com/danieleschmidt/spatial-omics-gfm/tutorials)
 - [Discussion Forum](https://discourse.spatial-omics-gfm.org)
