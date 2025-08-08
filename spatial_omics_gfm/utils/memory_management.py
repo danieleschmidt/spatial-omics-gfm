@@ -1,0 +1,649 @@
+"""
+Advanced memory management utilities for large-scale spatial transcriptomics processing.
+Implements efficient memory allocation, garbage collection, and data streaming strategies.
+"""
+
+import logging
+import gc
+import psutil
+import threading
+import time
+from typing import Dict, Any, Optional, Union, List, Callable, Iterator
+from pathlib import Path
+from dataclasses import dataclass
+from contextlib import contextmanager
+import warnings
+import numpy as np
+import torch
+from anndata import AnnData
+import h5py
+
+logger = logging.getLogger(__name__)
+
+
+@dataclass
+class MemoryConfig:
+    """Configuration for memory management."""
+    max_memory_gb: float = 8.0
+    warning_threshold: float = 0.8
+    critical_threshold: float = 0.95
+    gc_frequency: int = 100
+    chunk_size: int = 1000
+    enable_monitoring: bool = True
+    enable_swapping: bool = False
+    temp_dir: Optional[str] = None
+
+
+class MemoryMonitor:
+    """
+    Real-time memory monitoring and alerting system.
+    """
+    
+    def __init__(self, config: MemoryConfig):
+        self.config = config
+        self.monitoring = False
+        self.monitor_thread = None
+        self.callbacks = {
+            'warning': [],
+            'critical': [],
+            'info': []
+        }
+        self.stats = {
+            'peak_memory_gb': 0.0,
+            'avg_memory_gb': 0.0,
+            'gc_count': 0,
+            'warnings_count': 0,
+            'critical_count': 0
+        }
+        
+        logger.info(f"MemoryMonitor initialized with max memory: {config.max_memory_gb}GB")
+    
+    def start_monitoring(self, interval: float = 1.0) -> None:
+        """Start background memory monitoring."""
+        if self.monitoring:
+            logger.warning("Memory monitoring already running")
+            return
+        
+        self.monitoring = True
+        self.monitor_thread = threading.Thread(
+            target=self._monitor_loop,
+            args=(interval,),
+            daemon=True
+        )
+        self.monitor_thread.start()
+        logger.info("Memory monitoring started")
+    
+    def stop_monitoring(self) -> None:
+        """Stop background memory monitoring."""
+        self.monitoring = False
+        if self.monitor_thread:
+            self.monitor_thread.join(timeout=5.0)
+        logger.info("Memory monitoring stopped")
+    
+    def _monitor_loop(self, interval: float) -> None:
+        """Background monitoring loop."""
+        memory_samples = []
+        
+        while self.monitoring:
+            try:
+                current_memory = self.get_memory_usage()
+                memory_samples.append(current_memory['memory_gb'])
+                
+                # Update statistics
+                self.stats['peak_memory_gb'] = max(self.stats['peak_memory_gb'], current_memory['memory_gb'])
+                self.stats['avg_memory_gb'] = np.mean(memory_samples[-100:])  # Rolling average
+                
+                # Check thresholds
+                memory_ratio = current_memory['memory_gb'] / self.config.max_memory_gb
+                
+                if memory_ratio >= self.config.critical_threshold:
+                    self.stats['critical_count'] += 1
+                    self._trigger_callbacks('critical', current_memory)
+                    self._emergency_cleanup()
+                elif memory_ratio >= self.config.warning_threshold:
+                    self.stats['warnings_count'] += 1
+                    self._trigger_callbacks('warning', current_memory)
+                    self._proactive_cleanup()
+                
+                time.sleep(interval)
+                
+            except Exception as e:
+                logger.error(f"Memory monitoring error: {e}")
+                time.sleep(interval)
+    
+    def _trigger_callbacks(self, level: str, memory_info: Dict[str, Any]) -> None:
+        """Trigger registered callbacks for memory events."""
+        for callback in self.callbacks.get(level, []):
+            try:
+                callback(memory_info)
+            except Exception as e:
+                logger.error(f"Memory callback error: {e}")
+    
+    def _proactive_cleanup(self) -> None:
+        """Proactive memory cleanup."""
+        logger.info("Triggering proactive memory cleanup")
+        
+        # Python garbage collection
+        collected = gc.collect()
+        self.stats['gc_count'] += 1
+        
+        # PyTorch cache cleanup
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        
+        logger.info(f"Cleaned up {collected} objects")
+    
+    def _emergency_cleanup(self) -> None:
+        """Emergency memory cleanup."""
+        logger.warning("Triggering emergency memory cleanup")
+        
+        # Aggressive garbage collection
+        for _ in range(3):
+            gc.collect()
+        
+        # Clear PyTorch caches
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+            torch.cuda.ipc_collect()
+        
+        # Clear NumPy temporary arrays
+        np.seterr(all='ignore')
+        
+        self.stats['gc_count'] += 3
+    
+    def register_callback(self, level: str, callback: Callable) -> None:
+        """Register callback for memory events."""
+        if level in self.callbacks:
+            self.callbacks[level].append(callback)
+            logger.info(f"Registered {level} callback")
+    
+    def get_memory_usage(self) -> Dict[str, Any]:
+        """Get current memory usage statistics."""
+        # System memory
+        memory = psutil.virtual_memory()
+        
+        memory_info = {
+            'memory_gb': memory.used / (1024**3),
+            'memory_percent': memory.percent,
+            'available_gb': memory.available / (1024**3),
+            'total_gb': memory.total / (1024**3)
+        }
+        
+        # GPU memory if available
+        if torch.cuda.is_available():
+            memory_info.update({
+                'gpu_allocated_gb': torch.cuda.memory_allocated() / (1024**3),
+                'gpu_cached_gb': torch.cuda.memory_reserved() / (1024**3),
+                'gpu_max_allocated_gb': torch.cuda.max_memory_allocated() / (1024**3)
+            })
+        
+        return memory_info
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get memory monitoring statistics."""
+        current_memory = self.get_memory_usage()
+        
+        return {
+            'current_memory': current_memory,
+            'statistics': self.stats.copy(),
+            'monitoring_active': self.monitoring
+        }
+
+
+class DataChunker:
+    """
+    Efficient data chunking for processing large datasets.
+    """
+    
+    def __init__(self, config: MemoryConfig):
+        self.config = config
+        self.chunk_cache = {}
+        
+    def chunk_adata(
+        self,
+        adata: AnnData,
+        chunk_size: Optional[int] = None,
+        overlap: int = 0
+    ) -> Iterator[AnnData]:
+        """
+        Chunk AnnData object for memory-efficient processing.
+        
+        Args:
+            adata: AnnData object to chunk
+            chunk_size: Size of each chunk
+            overlap: Overlap between chunks
+            
+        Yields:
+            Chunked AnnData objects
+        """
+        chunk_size = chunk_size or self.config.chunk_size
+        n_obs = adata.n_obs
+        
+        logger.info(f"Chunking data: {n_obs} observations into chunks of {chunk_size}")
+        
+        for start_idx in range(0, n_obs, chunk_size - overlap):
+            end_idx = min(start_idx + chunk_size, n_obs)
+            
+            # Create chunk
+            chunk = adata[start_idx:end_idx].copy()
+            
+            # Add chunk metadata
+            chunk.uns['chunk_info'] = {
+                'start_idx': start_idx,
+                'end_idx': end_idx,
+                'chunk_size': end_idx - start_idx,
+                'total_size': n_obs,
+                'chunk_id': start_idx // (chunk_size - overlap)
+            }
+            
+            yield chunk
+            
+            # Cleanup
+            del chunk
+            gc.collect()
+    
+    def chunk_array(
+        self,
+        array: np.ndarray,
+        chunk_size: Optional[int] = None,
+        axis: int = 0
+    ) -> Iterator[np.ndarray]:
+        """
+        Chunk numpy array along specified axis.
+        
+        Args:
+            array: Array to chunk
+            chunk_size: Size of each chunk
+            axis: Axis along which to chunk
+            
+        Yields:
+            Chunked arrays
+        """
+        chunk_size = chunk_size or self.config.chunk_size
+        array_size = array.shape[axis]
+        
+        for start_idx in range(0, array_size, chunk_size):
+            end_idx = min(start_idx + chunk_size, array_size)
+            
+            # Create slice for the specified axis
+            slice_obj = [slice(None)] * array.ndim
+            slice_obj[axis] = slice(start_idx, end_idx)
+            
+            yield array[tuple(slice_obj)]
+    
+    def process_chunked(
+        self,
+        data_iterator: Iterator,
+        processing_func: Callable,
+        aggregation_func: Optional[Callable] = None,
+        progress_callback: Optional[Callable] = None
+    ) -> Any:
+        """
+        Process data chunks and optionally aggregate results.
+        
+        Args:
+            data_iterator: Iterator yielding data chunks
+            processing_func: Function to process each chunk
+            aggregation_func: Function to aggregate chunk results
+            progress_callback: Progress callback function
+            
+        Returns:
+            Processed/aggregated results
+        """
+        results = []
+        chunk_count = 0
+        
+        for chunk in data_iterator:
+            try:
+                # Process chunk
+                result = processing_func(chunk)
+                results.append(result)
+                
+                chunk_count += 1
+                
+                if progress_callback:
+                    progress_callback(chunk_count)
+                
+                # Periodic cleanup
+                if chunk_count % self.config.gc_frequency == 0:
+                    gc.collect()
+                    
+            except Exception as e:
+                logger.error(f"Error processing chunk {chunk_count}: {e}")
+                continue
+        
+        # Aggregate results if function provided
+        if aggregation_func and results:
+            final_result = aggregation_func(results)
+        else:
+            final_result = results
+        
+        logger.info(f"Processed {chunk_count} chunks")
+        return final_result
+
+
+class SwapManager:
+    """
+    Manages swapping of data to disk for memory optimization.
+    """
+    
+    def __init__(self, config: MemoryConfig):
+        self.config = config
+        self.swap_dir = Path(config.temp_dir) if config.temp_dir else Path.cwd() / "temp_swap"
+        self.swap_dir.mkdir(exist_ok=True)
+        self.swapped_objects = {}
+        self.swap_counter = 0
+        
+        logger.info(f"SwapManager initialized with swap dir: {self.swap_dir}")
+    
+    def swap_to_disk(self, obj: Any, key: Optional[str] = None) -> str:
+        """
+        Swap object to disk and return reference key.
+        
+        Args:
+            obj: Object to swap to disk
+            key: Optional key for the object
+            
+        Returns:
+            Reference key for swapped object
+        """
+        if key is None:
+            key = f"swap_{self.swap_counter}"
+            self.swap_counter += 1
+        
+        # Determine swap strategy based on object type
+        if isinstance(obj, AnnData):
+            swap_path = self.swap_dir / f"{key}.h5ad"
+            obj.write_h5ad(swap_path)
+        elif isinstance(obj, np.ndarray):
+            swap_path = self.swap_dir / f"{key}.npy"
+            np.save(swap_path, obj)
+        elif isinstance(obj, torch.Tensor):
+            swap_path = self.swap_dir / f"{key}.pt"
+            torch.save(obj, swap_path)
+        else:
+            # Use pickle for general objects
+            import pickle
+            swap_path = self.swap_dir / f"{key}.pkl"
+            with open(swap_path, 'wb') as f:
+                pickle.dump(obj, f)
+        
+        # Store metadata
+        self.swapped_objects[key] = {
+            'path': swap_path,
+            'type': type(obj).__name__,
+            'size_bytes': self._estimate_object_size(obj)
+        }
+        
+        logger.debug(f"Swapped object {key} to disk: {swap_path}")
+        return key
+    
+    def load_from_disk(self, key: str) -> Any:
+        """
+        Load swapped object from disk.
+        
+        Args:
+            key: Reference key for swapped object
+            
+        Returns:
+            Loaded object
+        """
+        if key not in self.swapped_objects:
+            raise KeyError(f"Swapped object {key} not found")
+        
+        metadata = self.swapped_objects[key]
+        swap_path = metadata['path']
+        obj_type = metadata['type']
+        
+        # Load based on object type
+        if obj_type == 'AnnData':
+            from anndata import read_h5ad
+            obj = read_h5ad(swap_path)
+        elif obj_type == 'ndarray':
+            obj = np.load(swap_path)
+        elif obj_type == 'Tensor':
+            obj = torch.load(swap_path)
+        else:
+            import pickle
+            with open(swap_path, 'rb') as f:
+                obj = pickle.load(f)
+        
+        logger.debug(f"Loaded object {key} from disk")
+        return obj
+    
+    def remove_swap(self, key: str) -> None:
+        """Remove swapped object from disk."""
+        if key in self.swapped_objects:
+            metadata = self.swapped_objects[key]
+            swap_path = metadata['path']
+            
+            if swap_path.exists():
+                swap_path.unlink()
+            
+            del self.swapped_objects[key]
+            logger.debug(f"Removed swap file: {swap_path}")
+    
+    def cleanup_all(self) -> None:
+        """Remove all swap files."""
+        for key in list(self.swapped_objects.keys()):
+            self.remove_swap(key)
+        
+        # Remove swap directory if empty
+        if self.swap_dir.exists() and not any(self.swap_dir.iterdir()):
+            self.swap_dir.rmdir()
+        
+        logger.info("Cleaned up all swap files")
+    
+    def _estimate_object_size(self, obj: Any) -> int:
+        """Estimate object size in bytes."""
+        if isinstance(obj, (np.ndarray, torch.Tensor)):
+            return obj.nbytes
+        elif isinstance(obj, AnnData):
+            return obj.X.nbytes + sum(arr.nbytes for arr in obj.obsm.values())
+        else:
+            # Rough estimate for other objects
+            return len(str(obj).encode('utf-8'))
+    
+    def get_swap_stats(self) -> Dict[str, Any]:
+        """Get swap statistics."""
+        total_size = sum(meta['size_bytes'] for meta in self.swapped_objects.values())
+        
+        return {
+            'num_swapped_objects': len(self.swapped_objects),
+            'total_swap_size_mb': total_size / (1024**2),
+            'swap_directory': str(self.swap_dir),
+            'objects': {key: meta['type'] for key, meta in self.swapped_objects.items()}
+        }
+
+
+@contextmanager
+def memory_managed_operation(
+    config: Optional[MemoryConfig] = None,
+    enable_monitoring: bool = True,
+    cleanup_on_exit: bool = True
+):
+    """
+    Context manager for memory-managed operations.
+    
+    Args:
+        config: Memory configuration
+        enable_monitoring: Whether to enable monitoring
+        cleanup_on_exit: Whether to cleanup on exit
+    """
+    config = config or MemoryConfig()
+    monitor = None
+    swap_manager = None
+    
+    try:
+        # Setup memory monitoring
+        if enable_monitoring:
+            monitor = MemoryMonitor(config)
+            monitor.start_monitoring()
+        
+        # Setup swap manager if enabled
+        if config.enable_swapping:
+            swap_manager = SwapManager(config)
+        
+        # Yield context objects
+        context = {
+            'monitor': monitor,
+            'swap_manager': swap_manager,
+            'chunker': DataChunker(config)
+        }
+        
+        yield context
+        
+    finally:
+        # Cleanup
+        if cleanup_on_exit:
+            if monitor:
+                monitor.stop_monitoring()
+            
+            if swap_manager:
+                swap_manager.cleanup_all()
+            
+            # Final garbage collection
+            gc.collect()
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+
+
+class MemoryEfficientDataLoader:
+    """
+    Memory-efficient data loader for large spatial transcriptomics datasets.
+    """
+    
+    def __init__(
+        self,
+        data_path: Union[str, Path],
+        config: MemoryConfig,
+        preload_chunks: int = 2
+    ):
+        self.data_path = Path(data_path)
+        self.config = config
+        self.preload_chunks = preload_chunks
+        self.chunker = DataChunker(config)
+        self.current_chunk = None
+        self.chunk_queue = []
+        
+    def __iter__(self) -> Iterator[AnnData]:
+        """Iterate over data chunks."""
+        if self.data_path.suffix == '.h5ad':
+            # Load AnnData and chunk it
+            adata = self._load_adata_lazy()
+            yield from self.chunker.chunk_adata(adata, self.config.chunk_size)
+        elif self.data_path.suffix == '.h5':
+            # Load from HDF5 file in chunks
+            yield from self._load_h5_chunks()
+        else:
+            raise ValueError(f"Unsupported file format: {self.data_path.suffix}")
+    
+    def _load_adata_lazy(self) -> AnnData:
+        """Load AnnData with minimal memory footprint."""
+        # Use backed mode for large files
+        try:
+            adata = AnnData.read_h5ad(self.data_path, backed='r')
+            return adata
+        except:
+            # Fallback to regular loading
+            adata = AnnData.read_h5ad(self.data_path)
+            return adata
+    
+    def _load_h5_chunks(self) -> Iterator[AnnData]:
+        """Load data from HDF5 file in chunks."""
+        with h5py.File(self.data_path, 'r') as f:
+            # Determine data structure
+            if 'X' in f:
+                X = f['X']
+                n_obs = X.shape[0]
+                
+                for start_idx in range(0, n_obs, self.config.chunk_size):
+                    end_idx = min(start_idx + self.config.chunk_size, n_obs)
+                    
+                    # Load chunk
+                    X_chunk = X[start_idx:end_idx]
+                    
+                    # Create minimal AnnData object
+                    adata_chunk = AnnData(X_chunk)
+                    
+                    # Add spatial coordinates if available
+                    if 'obsm/spatial' in f:
+                        spatial_chunk = f['obsm/spatial'][start_idx:end_idx]
+                        adata_chunk.obsm['spatial'] = spatial_chunk
+                    
+                    yield adata_chunk
+
+
+def optimize_numpy_memory():
+    """Optimize NumPy memory usage."""
+    # Set NumPy to use less memory for temporary arrays
+    import os
+    os.environ['OMP_NUM_THREADS'] = '1'
+    
+    # Configure NumPy memory mapping
+    np.seterr(all='ignore')
+    
+    logger.info("Optimized NumPy memory settings")
+
+
+def optimize_torch_memory():
+    """Optimize PyTorch memory usage."""
+    # Set memory fraction if CUDA available
+    if torch.cuda.is_available():
+        # Set memory fraction to prevent OOM
+        torch.cuda.set_per_process_memory_fraction(0.8)
+        
+        # Enable memory efficient attention
+        torch.backends.cuda.enable_flash_sdp(True)
+        
+        # Optimize CUDA malloc
+        torch.cuda.empty_cache()
+        
+        logger.info("Optimized CUDA memory settings")
+    
+    # Set CPU memory optimization
+    torch.set_num_threads(1)  # Reduce CPU memory usage
+    
+    logger.info("Optimized PyTorch memory settings")
+
+
+def get_memory_recommendations(adata: AnnData) -> Dict[str, Any]:
+    """
+    Get memory optimization recommendations for a dataset.
+    
+    Args:
+        adata: Spatial transcriptomics dataset
+        
+    Returns:
+        Dictionary of recommendations
+    """
+    # Estimate memory requirements
+    data_size_gb = adata.X.nbytes / (1024**3)
+    
+    # Get system memory
+    total_memory_gb = psutil.virtual_memory().total / (1024**3)
+    
+    recommendations = {
+        'data_size_gb': data_size_gb,
+        'system_memory_gb': total_memory_gb,
+        'memory_ratio': data_size_gb / total_memory_gb,
+    }
+    
+    # Generate recommendations
+    if recommendations['memory_ratio'] > 0.5:
+        recommendations['use_chunking'] = True
+        recommendations['recommended_chunk_size'] = max(100, int(adata.n_obs * 0.1))
+        recommendations['enable_swapping'] = True
+    else:
+        recommendations['use_chunking'] = False
+        recommendations['recommended_chunk_size'] = adata.n_obs
+        recommendations['enable_swapping'] = False
+    
+    if recommendations['memory_ratio'] > 0.8:
+        recommendations['use_quantization'] = True
+        recommendations['enable_aggressive_gc'] = True
+    else:
+        recommendations['use_quantization'] = False
+        recommendations['enable_aggressive_gc'] = False
+    
+    return recommendations

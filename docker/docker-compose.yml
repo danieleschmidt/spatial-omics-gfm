@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  spatial-omics-gfm:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - SPATIAL_OMICS_LOG_LEVEL=INFO
+      - SPATIAL_OMICS_DEVICE=auto
+      - SPATIAL_OMICS_BATCH_SIZE=32
+      - SPATIAL_OMICS_MAX_MEMORY_GB=8.0
+    volumes:
+      - model_data:/app/models
+      - log_data:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  spatial-omics-worker:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    command: ["python", "-m", "spatial_omics_gfm.worker"]
+    environment:
+      - SPATIAL_OMICS_LOG_LEVEL=INFO
+      - SPATIAL_OMICS_DEVICE=auto
+      - SPATIAL_OMICS_WORKER_MODE=true
+    volumes:
+      - model_data:/app/models
+      - log_data:/app/logs
+    restart: unless-stopped
+    depends_on:
+      - spatial-omics-gfm
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - spatial-omics-gfm
+    restart: unless-stopped
+
+volumes:
+  model_data:
+  log_data:
+  redis_data:

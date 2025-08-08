@@ -1,0 +1,43 @@
+# Testing dependencies for Spatial-Omics GFM
+pytest>=7.0.0
+pytest-cov>=4.0.0
+pytest-mock>=3.10.0
+pytest-xdist>=3.0.0
+pytest-benchmark>=4.0.0
+pytest-timeout>=2.1.0
+pytest-html>=3.1.0
+pytest-asyncio>=0.21.0
+
+# Coverage tools
+coverage>=7.0.0
+codecov>=2.1.0
+
+# Testing utilities
+factory-boy>=3.2.0
+hypothesis>=6.70.0
+freezegun>=1.2.0
+responses>=0.23.0
+httpx>=0.24.0
+
+# Performance testing
+memory-profiler>=0.60.0
+py-spy>=0.3.0
+psutil>=5.9.0
+
+# Mocking and fixtures
+pytest-factoryboy>=2.5.0
+pytest-fixture-config>=1.7.0
+
+# Test reporting
+pytest-instafail>=0.4.2
+pytest-clarity>=1.0.1
+pytest-sugar>=0.9.6
+
+# Linting and formatting (for test quality)
+flake8>=6.0.0
+black>=23.0.0
+isort>=5.12.0
+mypy>=1.0.0
+
+# Documentation testing
+doctest>=1.0.0
