@@ -1,0 +1,194 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spatial-omics-gfm
+  labels:
+    app: spatial-omics-gfm
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: spatial-omics-gfm
+  template:
+    metadata:
+      labels:
+        app: spatial-omics-gfm
+        version: v1
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+      - name: spatial-omics-gfm
+        image: spatial-omics-gfm:latest
+        ports:
+        - containerPort: 8000
+          name: http
+        env:
+        - name: SPATIAL_OMICS_LOG_LEVEL
+          value: "INFO"
+        - name: SPATIAL_OMICS_DEVICE
+          value: "auto"
+        - name: SPATIAL_OMICS_BATCH_SIZE
+          value: "32"
+        - name: SPATIAL_OMICS_MAX_MEMORY_GB
+          valueFrom:
+            configMapKeyRef:
+              name: spatial-omics-config
+              key: max_memory_gb
+        resources:
+          requests:
+            cpu: 1000m
+            memory: 4Gi
+          limits:
+            cpu: 4000m
+            memory: 8Gi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: model-storage
+          mountPath: /app/models
+        - name: log-storage
+          mountPath: /app/logs
+        - name: config
+          mountPath: /app/config
+          readOnly: true
+      volumes:
+      - name: model-storage
+        persistentVolumeClaim:
+          claimName: model-storage-pvc
+      - name: log-storage
+        persistentVolumeClaim:
+          claimName: log-storage-pvc
+      - name: config
+        configMap:
+          name: spatial-omics-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spatial-omics-gfm-service
+  labels:
+    app: spatial-omics-gfm
+spec:
+  selector:
+    app: spatial-omics-gfm
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8000
+    protocol: TCP
+  type: ClusterIP
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spatial-omics-config
+data:
+  max_memory_gb: "8.0"
+  batch_size: "32"
+  enable_compilation: "true"
+  enable_quantization: "false"
+  log_level: "INFO"
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: model-storage-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: fast-ssd
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: log-storage-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: standard
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spatial-omics-gfm-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rate-limit: "10"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  tls:
+  - hosts:
+    - spatial-omics-api.example.com
+    secretName: spatial-omics-tls
+  rules:
+  - host: spatial-omics-api.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: spatial-omics-gfm-service
+            port:
+              number: 80
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: spatial-omics-gfm-pdb
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: spatial-omics-gfm
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: spatial-omics-gfm-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: spatial-omics-gfm
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
