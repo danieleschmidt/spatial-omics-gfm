@@ -37,7 +37,6 @@ class TissueSegmenter(BaseTask):
     
     def __init__(
         self,
-        model: SpatialGraphTransformer,
         config: Optional[TaskConfig] = None,
         segmentation_method: str = "hierarchical",
         min_region_size: int = 50,
@@ -48,14 +47,15 @@ class TissueSegmenter(BaseTask):
         Initialize tissue segmenter.
         
         Args:
-            model: Pre-trained spatial graph transformer
             config: Task configuration
             segmentation_method: Method for segmentation ('hierarchical', 'spectral', 'watershed')
             min_region_size: Minimum size for tissue regions
             boundary_smoothing: Whether to smooth region boundaries
             multi_scale: Whether to perform multi-scale segmentation
         """
-        super().__init__(model, config)
+        if config is None:
+            config = TaskConfig(hidden_dim=1024, num_classes=10)  # Default 10 tissue regions
+        super().__init__(config)
         
         self.segmentation_method = segmentation_method
         self.min_region_size = min_region_size
@@ -64,16 +64,60 @@ class TissueSegmenter(BaseTask):
         
         # Initialize segmentation head
         self.segmentation_head = TissueSegmentationHead(
-            hidden_dim=model.config.hidden_dim,
-            num_regions=10,  # Default number of regions
-            dropout=config.dropout if config else 0.1
+            hidden_dim=config.hidden_dim,
+            num_regions=config.num_classes,
+            dropout=config.dropout
         )
         
         logger.info(f"Initialized TissueSegmenter with method: {segmentation_method}")
     
+    def forward(
+        self,
+        embeddings: torch.Tensor,
+        **kwargs
+    ) -> Dict[str, torch.Tensor]:
+        """
+        Forward pass for tissue segmentation.
+        
+        Args:
+            embeddings: Node embeddings from foundation model
+            
+        Returns:
+            Dictionary containing segmentation predictions
+        """
+        region_logits = self.segmentation_head(embeddings)
+        region_probs = F.softmax(region_logits, dim=-1)
+        
+        return {
+            'region_logits': region_logits,
+            'region_probabilities': region_probs,
+            'predictions': torch.argmax(region_probs, dim=-1),
+            'logits': region_logits
+        }
+    
+    def compute_loss(
+        self,
+        predictions: Dict[str, torch.Tensor],
+        targets: torch.Tensor,
+        **kwargs
+    ) -> torch.Tensor:
+        """
+        Compute tissue segmentation loss.
+        
+        Args:
+            predictions: Model predictions
+            targets: Ground truth region labels
+            
+        Returns:
+            Loss tensor
+        """
+        logits = predictions['region_logits']
+        return F.cross_entropy(logits, targets)
+    
     def predict(
         self,
         adata: AnnData,
+        foundation_model=None,
         num_regions: Optional[int] = None,
         return_embeddings: bool = False,
         return_boundaries: bool = True
@@ -93,7 +137,7 @@ class TissueSegmenter(BaseTask):
         logger.info("Performing tissue segmentation")
         
         # Get model embeddings
-        embeddings = self._get_embeddings(adata)
+        embeddings = self._get_embeddings(adata, foundation_model)
         
         # Determine optimal number of regions if not provided
         if num_regions is None:
@@ -634,14 +678,14 @@ class TissueSegmenter(BaseTask):
 class RegionClassifier(TissueSegmenter):
     """Specialized classifier for anatomical region identification."""
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         
         # Add region-specific classification head
         self.region_classifier = RegionClassificationHead(
-            hidden_dim=self.model.config.hidden_dim,
+            hidden_dim=self.config.hidden_dim,
             num_region_types=15,  # Common anatomical regions
-            dropout=0.1
+            dropout=self.config.dropout
         )
         
         logger.info("Initialized specialized RegionClassifier")

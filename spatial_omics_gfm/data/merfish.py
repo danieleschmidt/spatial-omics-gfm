@@ -88,6 +88,94 @@ class MERFISHDataset(BaseSpatialDataset):
         
         logger.info(f"Loaded MERFISH dataset: {self.adata.shape}")
     
+    def load_data(self, data_path: Union[str, Path], **kwargs) -> AnnData:
+        """
+        Load platform-specific data.
+        
+        Args:
+            data_path: Path to data files
+            **kwargs: Platform-specific arguments
+            
+        Returns:
+            AnnData object with loaded data
+        """
+        # Store original path and parameters
+        original_path = self.data_path
+        original_codebook_path = self.codebook_path
+        
+        self.data_path = Path(data_path)
+        
+        # Update parameters if provided
+        if 'codebook_path' in kwargs:
+            self.codebook_path = Path(kwargs['codebook_path']) if kwargs['codebook_path'] else None
+        if 'blank_correction' in kwargs:
+            self.blank_correction = kwargs['blank_correction']
+        if 'z_stack_projection' in kwargs:
+            self.z_stack_projection = kwargs['z_stack_projection']
+        
+        self._load_data()
+        return self.adata
+    
+    def validate_data(self, adata: AnnData) -> bool:
+        """
+        Validate that the data is suitable for processing.
+        
+        Args:
+            adata: AnnData object to validate
+            
+        Returns:
+            True if data is valid, False otherwise
+        """
+        try:
+            # Check basic structure
+            if adata.n_obs == 0 or adata.n_vars == 0:
+                logger.error("Empty dataset")
+                return False
+            
+            # Check for spatial coordinates
+            if 'spatial' not in adata.obsm:
+                logger.error("No spatial coordinates found")
+                return False
+            
+            # Check coordinate dimensions (MERFISH can have 2D or 3D)
+            if adata.obsm['spatial'].shape[1] not in [2, 3]:
+                logger.error("Spatial coordinates must be 2D or 3D for MERFISH")
+                return False
+            
+            # Check for valid expression data
+            if hasattr(adata.X, 'nnz') and adata.X.nnz == 0:
+                logger.error("No expression data found")
+                return False
+            
+            # MERFISH specific validations
+            # Check for reasonable cell counts per gene (MERFISH typically has discrete counts)
+            if hasattr(adata.X, 'toarray'):
+                sample_data = adata.X[:100].toarray() if adata.X.shape[0] > 100 else adata.X.toarray()
+            else:
+                sample_data = adata.X[:100] if adata.X.shape[0] > 100 else adata.X
+            
+            # Check if data looks like count data (mostly integers)
+            if sample_data.size > 0:
+                non_integer_fraction = np.mean(sample_data != np.round(sample_data))
+                if non_integer_fraction > 0.1:
+                    logger.warning("Data doesn't appear to be count-based, which is unusual for MERFISH")
+            
+            # Check for z-coordinate if available
+            if 'z_centroid' in adata.obs.columns:
+                logger.info("Found z-coordinate information")
+            
+            # Check if we have blank probe information
+            blank_genes = [gene for gene in adata.var_names if 'blank' in gene.lower()]
+            if blank_genes:
+                logger.info(f"Found {len(blank_genes)} potential blank probe genes")
+            
+            logger.info("MERFISH data validation passed")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Data validation failed: {e}")
+            return False
+    
     @classmethod
     def from_merfish_folder(
         cls,

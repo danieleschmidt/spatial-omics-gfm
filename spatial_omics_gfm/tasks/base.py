@@ -116,6 +116,118 @@ class BaseTask(nn.Module, ABC):
     def get_parameter_count(self) -> int:
         """Get the number of parameters in the task module."""
         return sum(p.numel() for p in self.parameters())
+    
+    def _get_embeddings(
+        self, 
+        adata, 
+        foundation_model=None
+    ) -> torch.Tensor:
+        """
+        Get embeddings from foundation model or use pre-computed embeddings.
+        
+        Args:
+            adata: AnnData object with spatial transcriptomics data
+            foundation_model: Optional foundation model for computing embeddings
+            
+        Returns:
+            Cell embeddings tensor
+        """
+        # If embeddings are already computed and stored
+        if hasattr(adata, 'obsm') and 'X_spatial_gfm' in adata.obsm:
+            return torch.tensor(adata.obsm['X_spatial_gfm'], dtype=torch.float32)
+        
+        # If foundation model is provided, compute embeddings
+        if foundation_model is not None:
+            with torch.no_grad():
+                # Get expression data
+                if hasattr(adata.X, 'toarray'):
+                    x = torch.tensor(adata.X.toarray(), dtype=torch.float32)
+                else:
+                    x = torch.tensor(adata.X, dtype=torch.float32)
+                
+                # Get spatial coordinates
+                spatial_coords = torch.tensor(adata.obsm['spatial'], dtype=torch.float32)
+                
+                # Get spatial graph if available
+                edge_index = None
+                edge_attr = None
+                if 'spatial_graph' in adata.uns:
+                    edge_index = torch.tensor(adata.uns['spatial_graph']['edge_index'], dtype=torch.long)
+                    if 'edge_attr' in adata.uns['spatial_graph']:
+                        edge_attr = torch.tensor(adata.uns['spatial_graph']['edge_attr'], dtype=torch.float32)
+                
+                # Compute embeddings using foundation model
+                embeddings = foundation_model(
+                    x=x,
+                    spatial_coords=spatial_coords,
+                    edge_index=edge_index,
+                    edge_attr=edge_attr
+                )
+                
+                return embeddings
+        
+        # Fallback: use raw expression as "embeddings"
+        if hasattr(adata.X, 'toarray'):
+            return torch.tensor(adata.X.toarray(), dtype=torch.float32)
+        else:
+            return torch.tensor(adata.X, dtype=torch.float32)
+    
+    def evaluate(
+        self,
+        predictions: Dict[str, torch.Tensor],
+        targets: torch.Tensor,
+        metrics: Optional[List[str]] = None
+    ) -> Dict[str, float]:
+        """
+        Evaluate task performance using specified metrics.
+        
+        Args:
+            predictions: Model predictions
+            targets: Ground truth targets
+            metrics: List of metrics to compute
+            
+        Returns:
+            Dictionary of computed metrics
+        """
+        if metrics is None:
+            metrics = ['accuracy']
+        
+        results = {}
+        
+        # Get prediction labels
+        if 'predictions' in predictions:
+            pred_labels = predictions['predictions']
+        elif 'logits' in predictions:
+            pred_labels = torch.argmax(predictions['logits'], dim=-1)
+        else:
+            raise ValueError("No predictions or logits found in output")
+        
+        # Convert to numpy for metric computation
+        pred_labels_np = pred_labels.cpu().numpy()
+        targets_np = targets.cpu().numpy()
+        
+        for metric in metrics:
+            if metric == 'accuracy':
+                results[metric] = float(np.mean(pred_labels_np == targets_np))
+            elif metric == 'precision':
+                from sklearn.metrics import precision_score
+                results[metric] = precision_score(targets_np, pred_labels_np, average='macro', zero_division=0)
+            elif metric == 'recall':
+                from sklearn.metrics import recall_score
+                results[metric] = recall_score(targets_np, pred_labels_np, average='macro', zero_division=0)
+            elif metric == 'f1':
+                from sklearn.metrics import f1_score
+                results[metric] = f1_score(targets_np, pred_labels_np, average='macro', zero_division=0)
+        
+        return results
+    
+    def save_task_head(self, filepath: str):
+        """Save task-specific parameters."""
+        torch.save(self.state_dict(), filepath)
+    
+    def load_task_head(self, filepath: str):
+        """Load task-specific parameters."""
+        self.load_state_dict(torch.load(filepath, map_location='cpu'))
 
 
 class ClassificationHead(nn.Module):

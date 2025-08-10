@@ -218,6 +218,46 @@ class CellTypeClassifier(BaseTask):
                 result['uncertainty'] = output['uncertainty']
             
             return result
+    
+    def predict_from_adata(
+        self,
+        adata,
+        foundation_model=None,
+        confidence_threshold: float = 0.5,
+        **kwargs
+    ) -> Dict[str, Any]:
+        """
+        Predict cell types from AnnData object.
+        
+        Args:
+            adata: AnnData object with spatial transcriptomics data
+            foundation_model: Optional foundation model for computing embeddings
+            confidence_threshold: Minimum confidence for predictions
+            
+        Returns:
+            Cell type predictions with confidence scores
+        """
+        # Get embeddings
+        embeddings = self._get_embeddings(adata, foundation_model)
+        
+        # Get additional inputs if available
+        edge_index = None
+        spatial_coords = None
+        
+        if 'spatial_graph' in adata.uns:
+            edge_index = torch.tensor(adata.uns['spatial_graph']['edge_index'], dtype=torch.long)
+        
+        if 'spatial' in adata.obsm:
+            spatial_coords = torch.tensor(adata.obsm['spatial'], dtype=torch.float32)
+        
+        # Make predictions
+        return self.predict_with_confidence(
+            embeddings=embeddings,
+            edge_index=edge_index,
+            spatial_coords=spatial_coords,
+            confidence_threshold=confidence_threshold,
+            **kwargs
+        )
 
 
 class HierarchicalCellTypeClassifier(BaseTask):
@@ -476,6 +516,34 @@ class HierarchicalCellTypeClassifier(BaseTask):
             return 1.0 - consistency  # Higher score for more consistent predictions
         
         return torch.tensor(1.0)  # Perfect consistency if only one level
+    
+    def predict_from_adata(
+        self,
+        adata,
+        foundation_model=None,
+        return_all_levels: bool = True,
+        **kwargs
+    ) -> Dict[str, Any]:
+        """
+        Predict hierarchical cell types from AnnData object.
+        
+        Args:
+            adata: AnnData object with spatial transcriptomics data
+            foundation_model: Optional foundation model for computing embeddings
+            return_all_levels: Whether to return predictions at all levels
+            
+        Returns:
+            Hierarchical cell type predictions
+        """
+        # Get embeddings
+        embeddings = self._get_embeddings(adata, foundation_model)
+        
+        # Make hierarchical predictions
+        return self.predict_hierarchical(
+            embeddings=embeddings,
+            return_all_levels=return_all_levels,
+            **kwargs
+        )
 
 
 class SpatialContextEncoder(nn.Module):

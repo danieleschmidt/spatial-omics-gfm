@@ -155,8 +155,8 @@ class SpatialPreprocessor:
         Returns:
             Filtered data
         """
-        min_cells = min_cells or self.config.quality_control.min_cells_per_gene
-        min_counts = min_counts or self.config.quality_control.get('min_counts_per_gene', 0)
+        min_cells = min_cells or self.config.min_cells_per_gene
+        min_counts = min_counts or self.config.min_counts_per_gene
         
         logger.info(f"Filtering genes: min_cells={min_cells}, min_counts={min_counts}")
         
@@ -196,9 +196,9 @@ class SpatialPreprocessor:
         Returns:
             Filtered data
         """
-        min_genes = min_genes or self.config.quality_control.min_genes_per_cell
-        max_genes = max_genes or self.config.quality_control.max_genes_per_cell
-        max_mt_percent = max_mt_percent or self.config.quality_control.mitochondrial_threshold
+        min_genes = min_genes or self.config.min_genes_per_cell
+        max_genes = max_genes or self.config.max_genes_per_cell
+        max_mt_percent = max_mt_percent or self.config.mitochondrial_threshold
         
         logger.info(f"Filtering cells: min_genes={min_genes}, max_genes={max_genes}, max_mt={max_mt_percent}")
         
@@ -237,7 +237,7 @@ class SpatialPreprocessor:
         Returns:
             Normalized data
         """
-        method = method or self.config.preprocessing.normalization
+        method = method or self.config.normalization
         
         logger.info(f"Normalizing expression with method: {method}")
         
@@ -321,7 +321,7 @@ class SpatialPreprocessor:
         Returns:
             Data with HVG selection
         """
-        n_top_genes = n_top_genes or self.config.preprocessing.highly_variable_genes
+        n_top_genes = n_top_genes or self.config.highly_variable_genes
         
         logger.info(f"Selecting highly variable genes: n_top={n_top_genes}")
         

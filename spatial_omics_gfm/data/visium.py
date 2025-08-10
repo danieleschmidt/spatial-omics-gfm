@@ -72,6 +72,68 @@ class VisiumDataset(BaseSpatialDataset):
         
         logger.info(f"Loaded Visium dataset: {self.adata.shape}")
     
+    def load_data(self, data_path: Union[str, Path], **kwargs) -> AnnData:
+        """
+        Load platform-specific data.
+        
+        Args:
+            data_path: Path to data files
+            **kwargs: Platform-specific arguments
+            
+        Returns:
+            AnnData object with loaded data
+        """
+        # Store original path and reload
+        original_path = self.data_path
+        self.data_path = Path(data_path)
+        self._load_data()
+        return self.adata
+    
+    def validate_data(self, adata: AnnData) -> bool:
+        """
+        Validate that the data is suitable for processing.
+        
+        Args:
+            adata: AnnData object to validate
+            
+        Returns:
+            True if data is valid, False otherwise
+        """
+        try:
+            # Check basic structure
+            if adata.n_obs == 0 or adata.n_vars == 0:
+                logger.error("Empty dataset")
+                return False
+            
+            # Check for spatial coordinates
+            if 'spatial' not in adata.obsm:
+                logger.error("No spatial coordinates found")
+                return False
+            
+            # Check coordinate dimensions
+            if adata.obsm['spatial'].shape[1] != 2:
+                logger.error("Spatial coordinates must be 2D")
+                return False
+            
+            # Check for valid expression data
+            if hasattr(adata.X, 'nnz') and adata.X.nnz == 0:
+                logger.error("No expression data found")
+                return False
+            
+            # Check for reasonable expression values
+            if hasattr(adata.X, 'max'):
+                max_val = adata.X.max()
+                if np.isinf(max_val) or np.isnan(max_val):
+                    logger.error("Invalid expression values detected")
+                    return False
+            
+            logger.info("Data validation passed")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Data validation failed: {e}")
+            return False
+    
     @classmethod
     def from_10x_folder(
         cls,

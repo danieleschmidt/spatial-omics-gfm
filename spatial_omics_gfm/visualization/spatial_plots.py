@@ -14,6 +14,12 @@ from typing import Optional, Dict, List, Any, Union, Tuple
 from pathlib import Path
 import warnings
 
+import plotly.graph_objects as go
+import plotly.express as px
+from plotly.subplots import make_subplots
+from scipy.spatial.distance import cdist
+from sklearn.preprocessing import StandardScaler
+
 from ..data.base import BaseSpatialDataset
 
 
@@ -700,3 +706,503 @@ class SpatialPlotter:
                 bbox=dict(boxstyle="round,pad=0.5", facecolor="lightgray", alpha=0.8))
         
         ax.set_title('Analysis Statistics')
+    
+    def create_interactive_spatial_plot(
+        self,
+        dataset: BaseSpatialDataset,
+        color_by: str = "cell_type",
+        predictions: Optional[Dict[str, Any]] = None,
+        gene_name: Optional[str] = None,
+        point_size: float = 5,
+        opacity: float = 0.8,
+        title: Optional[str] = None
+    ) -> go.Figure:
+        """
+        Create interactive spatial plot using Plotly.
+        
+        Args:
+            dataset: Spatial dataset to plot
+            color_by: What to color points by
+            predictions: Model predictions
+            gene_name: Gene name for expression coloring
+            point_size: Size of points
+            opacity: Point opacity
+            title: Plot title
+            
+        Returns:
+            Interactive Plotly figure
+        """
+        # Get spatial coordinates
+        data = dataset.get(0)
+        spatial_coords = data.pos.numpy()
+        
+        # Prepare data for plotting
+        df_data = {
+            'x': spatial_coords[:, 0],
+            'y': spatial_coords[:, 1],
+            'cell_id': list(range(len(spatial_coords)))
+        }
+        
+        # Determine colors
+        colors, labels = self._get_colors(dataset, color_by, predictions, gene_name)
+        
+        if isinstance(colors, np.ndarray) and colors.dtype in [np.float32, np.float64]:
+            # Continuous coloring
+            df_data['value'] = colors
+            df = pd.DataFrame(df_data)
+            
+            fig = px.scatter(
+                df, x='x', y='y', color='value',
+                color_continuous_scale='viridis',
+                hover_data={'cell_id': True},
+                title=title or f'Interactive Spatial Plot - {color_by.replace("_", " ").title()}'
+            )
+        else:
+            # Categorical coloring
+            df_data['category'] = labels
+            df = pd.DataFrame(df_data)
+            
+            fig = px.scatter(
+                df, x='x', y='y', color='category',
+                hover_data={'cell_id': True},
+                title=title or f'Interactive Spatial Plot - {color_by.replace("_", " ").title()}'
+            )
+        
+        # Update layout
+        fig.update_traces(marker=dict(size=point_size, opacity=opacity))
+        fig.update_layout(
+            xaxis_title='X Position (μm)',
+            yaxis_title='Y Position (μm)',
+            template='plotly_white',
+            width=800,
+            height=600
+        )
+        
+        # Ensure equal aspect ratio
+        fig.update_yaxis(scaleanchor="x", scaleratio=1)
+        
+        return fig
+    
+    def create_plotly_gene_expression_plot(
+        self,
+        dataset: BaseSpatialDataset,
+        gene_names: Union[str, List[str]],
+        ncols: int = 2,
+        title: Optional[str] = None
+    ) -> go.Figure:
+        """
+        Create interactive multi-gene expression plot using Plotly.
+        
+        Args:
+            dataset: Spatial dataset
+            gene_names: Gene name(s) to plot
+            ncols: Number of columns for subplots
+            title: Overall title
+            
+        Returns:
+            Interactive Plotly figure with subplots
+        """
+        if isinstance(gene_names, str):
+            gene_names = [gene_names]
+        
+        # Calculate subplot layout
+        nrows = (len(gene_names) + ncols - 1) // ncols
+        
+        # Create subplots
+        fig = make_subplots(
+            rows=nrows, cols=ncols,
+            subplot_titles=gene_names,
+            horizontal_spacing=0.05,
+            vertical_spacing=0.1
+        )
+        
+        # Get spatial coordinates
+        data = dataset.get(0)
+        spatial_coords = data.pos.numpy()
+        gene_expression = data.x.numpy()
+        
+        # Plot each gene
+        for i, gene_name in enumerate(gene_names):
+            row = i // ncols + 1
+            col = i % ncols + 1
+            
+            # Get gene expression
+            if gene_name in dataset.gene_names:
+                gene_idx = dataset.gene_names.index(gene_name)
+                expression = gene_expression[:, gene_idx]
+            else:
+                warnings.warn(f"Gene {gene_name} not found in dataset")
+                expression = np.zeros(len(spatial_coords))
+            
+            # Create scatter trace
+            scatter = go.Scatter(
+                x=spatial_coords[:, 0],
+                y=spatial_coords[:, 1],
+                mode='markers',
+                marker=dict(
+                    color=expression,
+                    colorscale='viridis',
+                    size=4,
+                    opacity=0.8,
+                    showscale=True if i == 0 else False,
+                    colorbar=dict(title="Expression") if i == 0 else None
+                ),
+                hovertemplate=f"{gene_name}<br>X: %{{x}}<br>Y: %{{y}}<br>Expression: %{{marker.color}}<extra></extra>",
+                name=gene_name,
+                showlegend=False
+            )
+            
+            fig.add_trace(scatter, row=row, col=col)
+        
+        # Update layout
+        fig.update_layout(
+            title=title or "Interactive Gene Expression Patterns",
+            template='plotly_white',
+            width=1000,
+            height=600
+        )
+        
+        # Update axes
+        for i in range(1, nrows + 1):
+            for j in range(1, ncols + 1):
+                fig.update_xaxes(title_text="X Position (μm)", row=i, col=j)
+                fig.update_yaxes(title_text="Y Position (μm)", row=i, col=j)
+        
+        return fig
+    
+    def plot_spatial_regions(
+        self,
+        dataset: BaseSpatialDataset,
+        regions: Dict[str, Any],
+        region_colors: Optional[Dict[str, str]] = None,
+        show_boundaries: bool = True,
+        boundary_alpha: float = 0.7,
+        title: Optional[str] = None,
+        save_path: Optional[str] = None
+    ) -> plt.Figure:
+        """
+        Plot spatial regions/domains identified in the tissue.
+        
+        Args:
+            dataset: Spatial dataset
+            regions: Dictionary containing region assignments
+            region_colors: Custom colors for regions
+            show_boundaries: Whether to show region boundaries
+            boundary_alpha: Alpha for boundary lines
+            title: Plot title
+            save_path: Path to save figure
+            
+        Returns:
+            Matplotlib figure
+        """
+        # Get spatial coordinates
+        data = dataset.get(0)
+        spatial_coords = data.pos.numpy()
+        
+        # Create figure
+        fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
+        
+        # Get region assignments
+        if 'region_assignments' in regions:
+            region_labels = regions['region_assignments']
+        else:
+            # Generate mock regions for demonstration
+            from sklearn.cluster import KMeans
+            kmeans = KMeans(n_clusters=5, random_state=42)
+            region_labels = kmeans.fit_predict(spatial_coords)
+        
+        # Set up colors
+        unique_regions = np.unique(region_labels)
+        if region_colors is None:
+            colors = sns.color_palette("Set2", len(unique_regions))
+            region_colors = {region: colors[i] for i, region in enumerate(unique_regions)}
+        
+        # Plot regions
+        for region in unique_regions:
+            mask = region_labels == region
+            ax.scatter(
+                spatial_coords[mask, 0],
+                spatial_coords[mask, 1],
+                c=[region_colors.get(region, 'gray')],
+                s=20,
+                alpha=0.8,
+                label=f'Region {region}',
+                edgecolors='none'
+            )
+        
+        # Add boundaries if requested
+        if show_boundaries:
+            self._add_region_boundaries(ax, spatial_coords, region_labels, boundary_alpha)
+        
+        # Formatting
+        ax.set_xlabel('X Position (μm)', fontsize=12)
+        ax.set_ylabel('Y Position (μm)', fontsize=12)
+        ax.set_aspect('equal')
+        
+        if title:
+            ax.set_title(title, fontsize=14)
+        else:
+            ax.set_title('Spatial Regions/Domains', fontsize=14)
+        
+        if len(unique_regions) <= 10:  # Only show legend if not too many regions
+            ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        
+        # Remove spines
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=self.dpi, bbox_inches='tight')
+        
+        return fig
+    
+    def plot_spatial_neighborhoods(
+        self,
+        dataset: BaseSpatialDataset,
+        neighborhoods: Dict[str, Any],
+        radius: float = 50.0,
+        show_connections: bool = True,
+        max_connections: int = 20,
+        title: Optional[str] = None,
+        save_path: Optional[str] = None
+    ) -> plt.Figure:
+        """
+        Plot spatial neighborhoods and cell-cell proximities.
+        
+        Args:
+            dataset: Spatial dataset
+            neighborhoods: Dictionary containing neighborhood information
+            radius: Neighborhood radius in micrometers
+            show_connections: Whether to show cell connections
+            max_connections: Maximum connections to display per cell
+            title: Plot title
+            save_path: Path to save figure
+            
+        Returns:
+            Matplotlib figure
+        """
+        # Get spatial coordinates
+        data = dataset.get(0)
+        spatial_coords = data.pos.numpy()
+        
+        # Create figure
+        fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
+        
+        # Plot all cells
+        ax.scatter(
+            spatial_coords[:, 0],
+            spatial_coords[:, 1],
+            c='lightblue',
+            s=15,
+            alpha=0.6,
+            edgecolors='none',
+            zorder=1
+        )
+        
+        # Add neighborhood connections
+        if show_connections:
+            # Calculate distances
+            distances = cdist(spatial_coords, spatial_coords)
+            
+            # Find neighbors within radius
+            neighbor_count = 0
+            for i in range(len(spatial_coords)):
+                if neighbor_count >= max_connections:
+                    break
+                
+                neighbors = np.where((distances[i, :] <= radius) & (distances[i, :] > 0))[0]
+                
+                for j in neighbors[:5]:  # Limit connections per cell
+                    if neighbor_count >= max_connections:
+                        break
+                    
+                    ax.plot(
+                        [spatial_coords[i, 0], spatial_coords[j, 0]],
+                        [spatial_coords[i, 1], spatial_coords[j, 1]],
+                        color='red',
+                        alpha=0.3,
+                        linewidth=0.5,
+                        zorder=2
+                    )
+                    neighbor_count += 1
+        
+        # Highlight central cells in neighborhoods
+        if 'neighborhood_centers' in neighborhoods:
+            centers = neighborhoods['neighborhood_centers']
+            ax.scatter(
+                spatial_coords[centers, 0],
+                spatial_coords[centers, 1],
+                c='red',
+                s=50,
+                alpha=0.8,
+                marker='*',
+                edgecolors='darkred',
+                linewidth=1,
+                label='Neighborhood Centers',
+                zorder=3
+            )
+        
+        # Add radius circles for visualization
+        if 'neighborhood_centers' in neighborhoods:
+            centers = neighborhoods['neighborhood_centers'][:10]  # Limit for clarity
+            for center_idx in centers:
+                center = spatial_coords[center_idx]
+                circle = plt.Circle(center, radius, fill=False, 
+                                  color='red', alpha=0.5, linewidth=1)
+                ax.add_patch(circle)
+        
+        # Formatting
+        ax.set_xlabel('X Position (μm)', fontsize=12)
+        ax.set_ylabel('Y Position (μm)', fontsize=12)
+        ax.set_aspect('equal')
+        
+        if title:
+            ax.set_title(title, fontsize=14)
+        else:
+            ax.set_title(f'Spatial Neighborhoods (radius: {radius}μm)', fontsize=14)
+        
+        if 'neighborhood_centers' in neighborhoods:
+            ax.legend()
+        
+        # Remove spines
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=self.dpi, bbox_inches='tight')
+        
+        return fig
+    
+    def plot_tissue_morphology(
+        self,
+        dataset: BaseSpatialDataset,
+        morphology_features: Optional[Dict[str, Any]] = None,
+        feature_name: str = "density",
+        overlay_predictions: bool = False,
+        predictions: Optional[Dict[str, Any]] = None,
+        title: Optional[str] = None,
+        save_path: Optional[str] = None
+    ) -> plt.Figure:
+        """
+        Plot tissue morphological features.
+        
+        Args:
+            dataset: Spatial dataset
+            morphology_features: Dictionary with morphological features
+            feature_name: Name of feature to visualize
+            overlay_predictions: Whether to overlay predictions
+            predictions: Model predictions for overlay
+            title: Plot title
+            save_path: Path to save figure
+            
+        Returns:
+            Matplotlib figure
+        """
+        # Get spatial coordinates
+        data = dataset.get(0)
+        spatial_coords = data.pos.numpy()
+        
+        # Create figure
+        fig, ax = plt.subplots(figsize=self.figsize, dpi=self.dpi)
+        
+        # Calculate or extract morphological features
+        if morphology_features and feature_name in morphology_features:
+            feature_values = morphology_features[feature_name]
+        else:
+            # Calculate cell density as default morphological feature
+            from scipy.spatial.distance import pdist, squareform
+            
+            # Calculate local density (number of neighbors within 100μm)
+            distances = squareform(pdist(spatial_coords))
+            feature_values = np.sum(distances <= 100, axis=1) - 1  # Exclude self
+        
+        # Create the base plot
+        scatter = ax.scatter(
+            spatial_coords[:, 0],
+            spatial_coords[:, 1],
+            c=feature_values,
+            s=25,
+            alpha=0.8,
+            cmap='viridis',
+            edgecolors='none'
+        )
+        
+        # Add colorbar
+        cbar = plt.colorbar(scatter, ax=ax, shrink=0.8)
+        cbar.set_label(feature_name.replace('_', ' ').title())
+        
+        # Overlay predictions if requested
+        if overlay_predictions and predictions and 'predictions' in predictions:
+            # Show predictions as contour or boundary overlay
+            pred_labels = predictions['predictions']
+            unique_preds = np.unique(pred_labels)
+            
+            # Create prediction boundaries
+            for pred in unique_preds:
+                mask = pred_labels == pred
+                if np.sum(mask) > 5:  # Only if enough points
+                    from scipy.spatial import ConvexHull
+                    try:
+                        hull = ConvexHull(spatial_coords[mask])
+                        for simplex in hull.simplices:
+                            ax.plot(spatial_coords[mask][simplex, 0], 
+                                   spatial_coords[mask][simplex, 1], 
+                                   'r-', alpha=0.3, linewidth=1)
+                    except:
+                        pass  # Skip if hull computation fails
+        
+        # Formatting
+        ax.set_xlabel('X Position (μm)', fontsize=12)
+        ax.set_ylabel('Y Position (μm)', fontsize=12)
+        ax.set_aspect('equal')
+        
+        if title:
+            ax.set_title(title, fontsize=14)
+        else:
+            title_text = f'Tissue Morphology - {feature_name.replace("_", " ").title()}'
+            if overlay_predictions:
+                title_text += ' with Predictions'
+            ax.set_title(title_text, fontsize=14)
+        
+        # Remove spines
+        ax.spines['top'].set_visible(False)
+        ax.spines['right'].set_visible(False)
+        
+        plt.tight_layout()
+        
+        if save_path:
+            plt.savefig(save_path, dpi=self.dpi, bbox_inches='tight')
+        
+        return fig
+    
+    def _add_region_boundaries(
+        self,
+        ax: plt.Axes,
+        coordinates: np.ndarray,
+        region_labels: np.ndarray,
+        alpha: float = 0.7
+    ) -> None:
+        """Add region boundaries to the plot."""
+        from scipy.spatial import ConvexHull
+        
+        unique_regions = np.unique(region_labels)
+        
+        for region in unique_regions:
+            mask = region_labels == region
+            region_coords = coordinates[mask]
+            
+            if len(region_coords) >= 3:  # Need at least 3 points for hull
+                try:
+                    hull = ConvexHull(region_coords)
+                    # Plot the convex hull boundary
+                    for simplex in hull.simplices:
+                        ax.plot(region_coords[simplex, 0], 
+                               region_coords[simplex, 1],
+                               'k-', alpha=alpha, linewidth=1)
+                except:
+                    # Skip if convex hull computation fails
+                    pass

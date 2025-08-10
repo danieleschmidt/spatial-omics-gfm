@@ -66,6 +66,77 @@ class SlideSeqDataset(BaseSpatialDataset):
         
         logger.info(f"Loaded Slide-seq dataset: {self.adata.shape}")
     
+    def load_data(self, data_path: Union[str, Path], **kwargs) -> AnnData:
+        """
+        Load platform-specific data.
+        
+        Args:
+            data_path: Path to data files
+            **kwargs: Platform-specific arguments
+            
+        Returns:
+            AnnData object with loaded data
+        """
+        # Store original paths and reload
+        original_data_path = self.data_path
+        original_coord_path = self.coordinates_path
+        
+        self.data_path = Path(data_path)
+        self.coordinates_path = kwargs.get('coordinates_path')
+        if self.coordinates_path:
+            self.coordinates_path = Path(self.coordinates_path)
+        
+        self._load_data()
+        return self.adata
+    
+    def validate_data(self, adata: AnnData) -> bool:
+        """
+        Validate that the data is suitable for processing.
+        
+        Args:
+            adata: AnnData object to validate
+            
+        Returns:
+            True if data is valid, False otherwise
+        """
+        try:
+            # Check basic structure
+            if adata.n_obs == 0 or adata.n_vars == 0:
+                logger.error("Empty dataset")
+                return False
+            
+            # Check for spatial coordinates
+            if 'spatial' not in adata.obsm:
+                logger.error("No spatial coordinates found")
+                return False
+            
+            # Check coordinate dimensions
+            if adata.obsm['spatial'].shape[1] != 2:
+                logger.error("Spatial coordinates must be 2D for Slide-seq")
+                return False
+            
+            # Check for valid expression data
+            if hasattr(adata.X, 'nnz') and adata.X.nnz == 0:
+                logger.error("No expression data found")
+                return False
+            
+            # Slide-seq specific validations
+            # Check bead density (should be high for Slide-seq)
+            coords = adata.obsm['spatial']
+            x_range = coords[:, 0].max() - coords[:, 0].min()
+            y_range = coords[:, 1].max() - coords[:, 1].min()
+            if x_range > 0 and y_range > 0:
+                density = len(coords) / (x_range * y_range)
+                if density < 1e-6:  # Very low density might indicate scaling issues
+                    logger.warning("Low bead density detected, check coordinate scaling")
+            
+            logger.info("Slide-seq data validation passed")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Data validation failed: {e}")
+            return False
+    
     @classmethod
     def from_csv_files(
         cls,

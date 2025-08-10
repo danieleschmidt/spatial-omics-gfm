@@ -12,7 +12,7 @@ from .merfish import MERFISHDataset
 from .preprocessing import SpatialPreprocessor
 from .graph_construction import SpatialGraphBuilder
 from .augmentation import SpatialAugmentor
-from .base import BaseSpatialDataset
+from .base import BaseSpatialDataset, SpatialDataConfig
 
 __all__ = [
     "VisiumDataset",
@@ -23,4 +23,5 @@ __all__ = [
     "SpatialGraphBuilder",
     "SpatialAugmentor",
     "BaseSpatialDataset",
+    "SpatialDataConfig",
 ]
