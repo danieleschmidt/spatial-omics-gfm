@@ -37,7 +37,6 @@ class PathwayAnalyzer(BaseTask):
     
     def __init__(
         self,
-        model: SpatialGraphTransformer,
         config: Optional[TaskConfig] = None,
         pathway_database: str = "kegg",
         species: str = "human",
@@ -49,7 +48,6 @@ class PathwayAnalyzer(BaseTask):
         Initialize pathway analyzer.
         
         Args:
-            model: Pre-trained spatial graph transformer
             config: Task configuration
             pathway_database: Database for pathways ('kegg', 'reactome', 'go', 'hallmark')
             species: Species for pathway database
@@ -57,7 +55,9 @@ class PathwayAnalyzer(BaseTask):
             spatial_smoothing: Whether to apply spatial smoothing
             smoothing_sigma: Sigma for Gaussian smoothing
         """
-        super().__init__(model, config)
+        if config is None:
+            config = TaskConfig(hidden_dim=1024, num_classes=50)  # Default number of pathways
+        super().__init__(config)
         
         self.pathway_database = pathway_database
         self.species = species
@@ -70,9 +70,9 @@ class PathwayAnalyzer(BaseTask):
         
         # Initialize pathway scoring head
         self.pathway_head = PathwayScoringHead(
-            hidden_dim=model.config.hidden_dim,
+            hidden_dim=config.hidden_dim,
             num_pathways=len(self.pathways),
-            dropout=config.dropout if config else 0.1
+            dropout=config.dropout
         )
         
         logger.info(f"Initialized PathwayAnalyzer with {len(self.pathways)} pathways")
@@ -237,9 +237,52 @@ class PathwayAnalyzer(BaseTask):
         }
         return pathways
     
+    def forward(
+        self,
+        embeddings: torch.Tensor,
+        **kwargs
+    ) -> Dict[str, torch.Tensor]:
+        """
+        Forward pass for pathway activity prediction.
+        
+        Args:
+            embeddings: Node embeddings from foundation model
+            
+        Returns:
+            Dictionary containing pathway activity scores
+        """
+        pathway_scores = self.pathway_head(embeddings)
+        
+        return {
+            'pathway_scores': pathway_scores,
+            'predictions': pathway_scores,  # For compatibility
+            'logits': pathway_scores
+        }
+    
+    def compute_loss(
+        self,
+        predictions: Dict[str, torch.Tensor],
+        targets: torch.Tensor,
+        **kwargs
+    ) -> torch.Tensor:
+        """
+        Compute pathway activity prediction loss.
+        
+        Args:
+            predictions: Model predictions
+            targets: Ground truth pathway activities
+            
+        Returns:
+            Loss tensor
+        """
+        pathway_scores = predictions['pathway_scores']
+        # Use MSE loss for continuous pathway scores
+        return F.mse_loss(pathway_scores, targets)
+    
     def predict(
         self,
         adata: AnnData,
+        foundation_model=None,
         cell_types: Optional[pd.Series] = None,
         return_embeddings: bool = False,
         compute_gradients: bool = True,
@@ -266,7 +309,7 @@ class PathwayAnalyzer(BaseTask):
             pathways_to_analyze = {k: v for k, v in self.pathways.items() if k in pathway_subset}
         
         # Get model embeddings
-        embeddings = self._get_embeddings(adata)
+        embeddings = self._get_embeddings(adata, foundation_model)
         
         # Compute pathway activity scores
         pathway_scores = self._compute_pathway_activity(adata, pathways_to_analyze)
@@ -780,8 +823,8 @@ class PathwayScoringHead(nn.Module):
 class SpatialPathwayAnalyzer(PathwayAnalyzer):
     """Specialized analyzer focusing on spatial aspects of pathway activity."""
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         logger.info("Initialized specialized SpatialPathwayAnalyzer")
     
     def analyze_pathway_communication(

@@ -35,7 +35,6 @@ class InteractionPredictor(BaseTask):
     
     def __init__(
         self,
-        model: SpatialGraphTransformer,
         config: Optional[TaskConfig] = None,
         interaction_database: str = "cellphonedb",
         species: str = "human",
@@ -47,7 +46,6 @@ class InteractionPredictor(BaseTask):
         Initialize interaction predictor.
         
         Args:
-            model: Pre-trained spatial graph transformer
             config: Task configuration
             interaction_database: Database for L-R pairs ('cellphonedb', 'nichenet', 'connectome')
             species: Species for interaction database
@@ -55,7 +53,9 @@ class InteractionPredictor(BaseTask):
             min_expression_threshold: Minimum expression for L-R consideration
             significance_threshold: P-value threshold for significance
         """
-        super().__init__(model, config)
+        if config is None:
+            config = TaskConfig(hidden_dim=1024, num_classes=3)  # 3 interaction types
+        super().__init__(config)
         
         self.interaction_database = interaction_database
         self.species = species
@@ -68,9 +68,9 @@ class InteractionPredictor(BaseTask):
         
         # Initialize prediction head
         self.interaction_head = InteractionPredictionHead(
-            hidden_dim=model.config.hidden_dim,
+            hidden_dim=config.hidden_dim,
             num_interaction_types=3,  # ligand-receptor, paracrine, juxtacrine
-            dropout=config.dropout if config else 0.1
+            dropout=config.dropout
         )
         
         logger.info(f"Initialized InteractionPredictor with {len(self.lr_database)} L-R pairs")
@@ -135,9 +135,64 @@ class InteractionPredictor(BaseTask):
         df['species'] = self.species
         return df
     
+    def forward(
+        self,
+        embeddings: torch.Tensor,
+        edge_index: Optional[torch.Tensor] = None,
+        edge_attr: Optional[torch.Tensor] = None,
+        **kwargs
+    ) -> Dict[str, torch.Tensor]:
+        """
+        Forward pass for interaction prediction.
+        
+        Args:
+            embeddings: Node embeddings from foundation model
+            edge_index: Graph edge connectivity
+            edge_attr: Edge attributes (distances, etc.)
+            
+        Returns:
+            Dictionary containing interaction predictions
+        """
+        if edge_index is None:
+            raise ValueError("edge_index is required for interaction prediction")
+        
+        if edge_attr is None:
+            # Create default edge attributes (just distances)
+            edge_attr = torch.ones(edge_index.size(1), 3)  # distance, angle, type placeholder
+        
+        # Predict interaction types
+        interaction_logits = self.interaction_head(embeddings, edge_index, edge_attr)
+        interaction_probs = F.softmax(interaction_logits, dim=-1)
+        
+        return {
+            'interaction_logits': interaction_logits,
+            'interaction_probabilities': interaction_probs,
+            'predictions': torch.argmax(interaction_probs, dim=-1)
+        }
+    
+    def compute_loss(
+        self,
+        predictions: Dict[str, torch.Tensor],
+        targets: torch.Tensor,
+        **kwargs
+    ) -> torch.Tensor:
+        """
+        Compute interaction prediction loss.
+        
+        Args:
+            predictions: Model predictions
+            targets: Ground truth interaction labels
+            
+        Returns:
+            Loss tensor
+        """
+        logits = predictions['interaction_logits']
+        return F.cross_entropy(logits, targets)
+    
     def predict(
         self,
         adata: AnnData,
+        foundation_model=None,
         cell_types: Optional[pd.Series] = None,
         return_embeddings: bool = False,
         compute_significance: bool = True
@@ -157,7 +212,7 @@ class InteractionPredictor(BaseTask):
         logger.info("Predicting cell-cell interactions")
         
         # Get model embeddings
-        embeddings = self._get_embeddings(adata)
+        embeddings = self._get_embeddings(adata, foundation_model)
         
         # Predict interaction probabilities
         interaction_probs = self._predict_interactions(adata, embeddings)
@@ -648,8 +703,8 @@ class InteractionPredictionHead(nn.Module):
 class LigandReceptorPredictor(InteractionPredictor):
     """Specialized predictor focusing on ligand-receptor interactions."""
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         logger.info("Initialized specialized LigandReceptorPredictor")
     
     def predict_lr_activity(

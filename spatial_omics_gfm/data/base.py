@@ -21,14 +21,24 @@ import warnings
 @dataclass
 class SpatialDataConfig:
     """Configuration for spatial data processing."""
+    # Preprocessing options
     normalize: bool = True
     log_transform: bool = True
     filter_genes: bool = True
     filter_cells: bool = True
+    
+    # Quality control thresholds
     min_cells_per_gene: int = 10
     min_genes_per_cell: int = 200
     max_genes_per_cell: int = 5000
+    min_counts_per_gene: int = 0
+    mitochondrial_threshold: float = 20.0  # percentage
+    
+    # Feature selection
     highly_variable_genes: int = 3000
+    normalization: str = 'total_counts'  # 'total_counts', 'scran', 'quantile'
+    
+    # Spatial graph construction
     spatial_graph_k: int = 6
     spatial_graph_radius: Optional[float] = None
     edge_features: List[str] = None
@@ -125,7 +135,8 @@ class BaseSpatialDataset(Dataset, ABC):
         from .graph_construction import SpatialGraphBuilder
         
         builder = SpatialGraphBuilder(self.config)
-        return builder.build_graph(adata)
+        edge_index, edge_attr, graph_info = builder.build_spatial_graph(adata.obsm['spatial'])
+        return edge_index, edge_attr
     
     def setup(self, data_path: Union[str, Path], **kwargs) -> None:
         """

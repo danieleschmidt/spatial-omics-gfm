@@ -79,6 +79,84 @@ class XeniumDataset(BaseSpatialDataset):
         
         logger.info(f"Loaded Xenium dataset: {self.adata.shape}")
     
+    def load_data(self, data_path: Union[str, Path], **kwargs) -> AnnData:
+        """
+        Load platform-specific data.
+        
+        Args:
+            data_path: Path to data files
+            **kwargs: Platform-specific arguments
+            
+        Returns:
+            AnnData object with loaded data
+        """
+        # Store original path and reload
+        original_path = self.data_path
+        self.data_path = Path(data_path)
+        
+        # Update other parameters if provided
+        if 'load_transcripts' in kwargs:
+            self.load_transcripts = kwargs['load_transcripts']
+        if 'load_boundaries' in kwargs:
+            self.load_boundaries = kwargs['load_boundaries']
+        if 'merge_fov' in kwargs:
+            self.merge_fov = kwargs['merge_fov']
+        
+        self._load_data()
+        return self.adata
+    
+    def validate_data(self, adata: AnnData) -> bool:
+        """
+        Validate that the data is suitable for processing.
+        
+        Args:
+            adata: AnnData object to validate
+            
+        Returns:
+            True if data is valid, False otherwise
+        """
+        try:
+            # Check basic structure
+            if adata.n_obs == 0 or adata.n_vars == 0:
+                logger.error("Empty dataset")
+                return False
+            
+            # Check for spatial coordinates
+            if 'spatial' not in adata.obsm:
+                logger.error("No spatial coordinates found")
+                return False
+            
+            # Check coordinate dimensions
+            if adata.obsm['spatial'].shape[1] != 2:
+                logger.error("Spatial coordinates must be 2D")
+                return False
+            
+            # Check for valid expression data
+            if hasattr(adata.X, 'nnz') and adata.X.nnz == 0:
+                logger.error("No expression data found")
+                return False
+            
+            # Xenium specific validations
+            # Check if we have cell metadata
+            if 'x_centroid' in adata.obs.columns and 'y_centroid' in adata.obs.columns:
+                # Verify coordinate consistency
+                obs_coords = adata.obs[['x_centroid', 'y_centroid']].values
+                obsm_coords = adata.obsm['spatial']
+                if not np.allclose(obs_coords, obsm_coords, atol=1e-6):
+                    logger.warning("Coordinate mismatch between obs and obsm")
+            
+            # Check for field of view information
+            if 'fov' in adata.obs.columns:
+                n_fovs = adata.obs['fov'].nunique()
+                logger.info(f"Found {n_fovs} fields of view")
+            
+            logger.info("Xenium data validation passed")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Data validation failed: {e}")
+            return False
+    
     @classmethod
     def from_xenium_folder(
         cls,
