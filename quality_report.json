@@ -1,0 +1,203 @@
+{
+  "syntax_check": {
+    "passed": false,
+    "total_files": 83,
+    "errors": [
+      "examples/complete_robustness_example.py:225: expected an indented block after 'try' statement on line 223",
+      "scripts/fix_syntax_issues.py:19: unterminated string literal (detected at line 19)"
+    ],
+    "metrics": {
+      "syntax_errors": 2,
+      "files_checked": 83
+    }
+  },
+  "import_structure": {
+    "passed": true,
+    "errors": [],
+    "metrics": {
+      "modules_checked": 7,
+      "structure_issues": 0
+    }
+  },
+  "type_hints": {
+    "passed": true,
+    "errors": [],
+    "metrics": {
+      "total_functions": 1286,
+      "typed_functions": 1195,
+      "coverage_percentage": 92.92
+    }
+  },
+  "code_quality": {
+    "passed": false,
+    "errors": [
+      "spatial_omics_gfm/data/augmentation.py:69: Function 'augment' too complex (complexity: 22)",
+      "spatial_omics_gfm/data/merfish.py:119: Function 'validate_data' too complex (complexity: 13)",
+      "spatial_omics_gfm/data/slideseq.py:92: Function 'validate_data' too complex (complexity: 11)",
+      "spatial_omics_gfm/data/slideseq.py:330: Function '_detect_coordinate_columns' too complex (complexity: 11)",
+      "spatial_omics_gfm/data/visium.py:92: Function 'validate_data' too complex (complexity: 11)",
+      "spatial_omics_gfm/data/xenium.py:108: Function 'validate_data' too complex (complexity: 12)",
+      "spatial_omics_gfm/inference/batch_inference.py:83: Function 'process_large_dataset' too long (113 lines)",
+      "spatial_omics_gfm/inference/batch_inference.py:320: Function '_load_h5_chunk' too complex (complexity: 13)",
+      "spatial_omics_gfm/inference/enhanced_streaming.py: File too long (1083 lines)",
+      "spatial_omics_gfm/models/pretrained_models.py:86: Function 'load_pretrained_model' too long (108 lines)",
+      "spatial_omics_gfm/models/advanced_deployment.py: File too long (1182 lines)",
+      "spatial_omics_gfm/models/advanced_deployment.py:436: Function 'select_model_instance' too complex (complexity: 11)",
+      "spatial_omics_gfm/models/advanced_deployment.py:793: Function 'predict' too long (118 lines)",
+      "spatial_omics_gfm/models/advanced_deployment.py:793: Function 'predict' too complex (complexity: 13)",
+      "spatial_omics_gfm/research/benchmarking.py:655: Function '_generate_performance_recommendations' too complex (complexity: 15)",
+      "spatial_omics_gfm/research/advanced_benchmarking.py: File too long (1486 lines)",
+      "spatial_omics_gfm/research/advanced_benchmarking.py:517: Function '_generate_statistical_plots' too complex (complexity: 11)",
+      "spatial_omics_gfm/tasks/base.py:300: Function '__init__' too complex (complexity: 11)",
+      "spatial_omics_gfm/tasks/cell_typing.py:298: Function '_build_hierarchy_structure' too complex (complexity: 14)",
+      "spatial_omics_gfm/tasks/interaction_prediction.py:270: Function '_analyze_ligand_receptor_pairs' too complex (complexity: 11)",
+      "spatial_omics_gfm/training/contrastive_learning.py:420: Function 'train_contrastive' too long (112 lines)",
+      "spatial_omics_gfm/training/curriculum_learning.py:109: Function 'train_with_curriculum' too long (144 lines)",
+      "spatial_omics_gfm/training/distributed_training.py:347: Function '_train_distributed_inner' too long (144 lines)",
+      "spatial_omics_gfm/training/distributed_training.py:347: Function '_train_distributed_inner' too complex (complexity: 16)",
+      "spatial_omics_gfm/training/distributed_training.py:492: Function '_train_epoch' too long (102 lines)",
+      "spatial_omics_gfm/training/fine_tuning.py:149: Function 'setup_training' too complex (complexity: 11)",
+      "spatial_omics_gfm/training/fine_tuning.py:267: Function 'fine_tune' too long (109 lines)",
+      "spatial_omics_gfm/training/fine_tuning.py:267: Function 'fine_tune' too complex (complexity: 11)",
+      "spatial_omics_gfm/training/scalable_distributed_training.py: File too long (1182 lines)",
+      "spatial_omics_gfm/training/scalable_distributed_training.py:875: Function '_distributed_training_loop' too long (117 lines)",
+      "spatial_omics_gfm/training/scalable_distributed_training.py:875: Function '_distributed_training_loop' too complex (complexity: 13)",
+      "spatial_omics_gfm/utils/optimization.py:642: Function 'optimize_for_production' too complex (complexity: 13)",
+      "spatial_omics_gfm/utils/validators.py:710: Function 'validate_model_config' too complex (complexity: 14)",
+      "spatial_omics_gfm/utils/validators.py:146: Function '_validate_expression_matrix' too complex (complexity: 13)",
+      "spatial_omics_gfm/utils/enhanced_validators.py:612: Function 'validate_model_config_robust' too complex (complexity: 13)",
+      "spatial_omics_gfm/utils/enhanced_validators.py:437: Function 'validate_spatial_data_robust' too long (130 lines)",
+      "spatial_omics_gfm/utils/enhanced_validators.py:437: Function 'validate_spatial_data_robust' too complex (complexity: 21)",
+      "spatial_omics_gfm/utils/security.py:78: Function 'sanitize_string' too complex (complexity: 11)",
+      "spatial_omics_gfm/utils/advanced_monitoring.py:97: Function 'get_aggregated' too complex (complexity: 11)",
+      "spatial_omics_gfm/utils/advanced_caching.py: File too long (1319 lines)",
+      "spatial_omics_gfm/utils/cuda_kernels.py: File too long (1152 lines)",
+      "spatial_omics_gfm/utils/auto_scaling.py: File too long (1151 lines)",
+      "spatial_omics_gfm/utils/auto_scaling.py:277: Function 'evaluate_scaling' too complex (complexity: 16)",
+      "spatial_omics_gfm/utils/auto_scaling.py:625: Function 'evaluate_scaling' too complex (complexity: 14)",
+      "spatial_omics_gfm/utils/auto_scaling.py:825: Function 'get_next_instance' too complex (complexity: 13)",
+      "spatial_omics_gfm/visualization/interaction_networks.py:61: Function 'plot_interaction_network' too long (143 lines)",
+      "spatial_omics_gfm/visualization/interaction_networks.py:61: Function 'plot_interaction_network' too complex (complexity: 16)",
+      "spatial_omics_gfm/visualization/interaction_networks.py:205: Function 'plot_spatial_interactions' too long (121 lines)",
+      "spatial_omics_gfm/visualization/interaction_networks.py:327: Function 'plot_interaction_heatmap' too long (107 lines)",
+      "spatial_omics_gfm/visualization/interaction_networks.py:327: Function 'plot_interaction_heatmap' too complex (complexity: 14)",
+      "spatial_omics_gfm/visualization/interaction_networks.py:435: Function 'plot_interactive_network' too long (140 lines)",
+      "spatial_omics_gfm/visualization/interactive_viewer.py:72: Function 'create_interactive_spatial_plot' too long (139 lines)",
+      "spatial_omics_gfm/visualization/interactive_viewer.py:72: Function 'create_interactive_spatial_plot' too complex (complexity: 17)",
+      "spatial_omics_gfm/visualization/interactive_viewer.py:212: Function 'create_interactive_gene_expression_plot' too long (105 lines)",
+      "spatial_omics_gfm/visualization/interactive_viewer.py:212: Function 'create_interactive_gene_expression_plot' too complex (complexity: 11)",
+      "spatial_omics_gfm/visualization/interactive_viewer.py:353: Function 'create_interactive_interaction_plot' too long (125 lines)",
+      "spatial_omics_gfm/visualization/pathway_maps.py:64: Function 'plot_pathway_heatmap' too long (105 lines)",
+      "spatial_omics_gfm/visualization/pathway_maps.py:64: Function 'plot_pathway_heatmap' too complex (complexity: 11)",
+      "spatial_omics_gfm/visualization/pathway_maps.py:170: Function 'plot_pathway_network' too long (142 lines)",
+      "spatial_omics_gfm/visualization/pathway_maps.py:170: Function 'plot_pathway_network' too complex (complexity: 21)",
+      "spatial_omics_gfm/visualization/pathway_maps.py:397: Function 'plot_pathway_enrichment' too long (101 lines)",
+      "spatial_omics_gfm/visualization/pathway_maps.py:397: Function 'plot_pathway_enrichment' too complex (complexity: 13)",
+      "spatial_omics_gfm/visualization/spatial_plots.py: File too long (1208 lines)",
+      "spatial_omics_gfm/visualization/spatial_plots.py:53: Function 'plot_spatial' too long (102 lines)",
+      "spatial_omics_gfm/visualization/spatial_plots.py:256: Function 'plot_predictions_overlay' too long (133 lines)",
+      "spatial_omics_gfm/visualization/spatial_plots.py:256: Function 'plot_predictions_overlay' too complex (complexity: 13)",
+      "spatial_omics_gfm/visualization/spatial_plots.py:490: Function '_get_colors' too complex (complexity: 12)",
+      "spatial_omics_gfm/visualization/spatial_plots.py:961: Function 'plot_spatial_neighborhoods' too long (118 lines)",
+      "spatial_omics_gfm/visualization/spatial_plots.py:961: Function 'plot_spatial_neighborhoods' too complex (complexity: 12)",
+      "spatial_omics_gfm/visualization/spatial_plots.py:1080: Function 'plot_tissue_morphology' too long (101 lines)",
+      "spatial_omics_gfm/visualization/spatial_plots.py:1080: Function 'plot_tissue_morphology' too complex (complexity: 12)"
+    ],
+    "metrics": {
+      "total_lines": 39536,
+      "total_files": 61,
+      "avg_complexity": 3.42,
+      "long_functions": 24,
+      "long_files": 8
+    }
+  },
+  "security_scan": {
+    "passed": false,
+    "errors": [
+      "examples/simple_training_example.py:194: Use of eval() function",
+      "examples/simple_training_example.py:195: Use of eval() function",
+      "examples/simple_training_example.py:228: Use of eval() function",
+      "examples/simple_training_example.py:229: Use of eval() function",
+      "examples/basic_usage_example.py:194: Use of eval() function",
+      "scripts/quality_gates.py:287: Use of eval() function",
+      "scripts/quality_gates.py:288: Use of exec() function",
+      "scripts/quality_gates.py:292: Use of os.system()",
+      "tests/conftest.py:122: Use of eval() function",
+      "spatial_omics_gfm/inference/efficient_inference.py:68: Use of eval() function",
+      "spatial_omics_gfm/inference/efficient_inference.py:90: Use of eval() function",
+      "spatial_omics_gfm/inference/efficient_inference.py:205: Use of eval() function",
+      "spatial_omics_gfm/inference/efficient_inference.py:488: Use of eval() function",
+      "spatial_omics_gfm/inference/uncertainty.py:378: Use of eval() function",
+      "spatial_omics_gfm/inference/uncertainty.py:397: Use of eval() function",
+      "spatial_omics_gfm/inference/enhanced_streaming.py:308: Use of eval() function",
+      "spatial_omics_gfm/inference/enhanced_streaming.py:545: Use of eval() function",
+      "spatial_omics_gfm/models/deployment.py:187: Use of eval() function",
+      "spatial_omics_gfm/models/pretrained_models.py:182: Use of eval() function",
+      "spatial_omics_gfm/training/contrastive_learning.py:594: Use of eval() function",
+      "spatial_omics_gfm/training/contrastive_learning.py:595: Use of eval() function",
+      "spatial_omics_gfm/training/contrastive_learning.py:598: Use of eval() function",
+      "spatial_omics_gfm/training/contrastive_learning.py:772: Use of eval() function",
+      "spatial_omics_gfm/training/distributed_training.py:597: Use of eval() function",
+      "spatial_omics_gfm/training/fine_tuning.py:450: Use of eval() function",
+      "spatial_omics_gfm/training/fine_tuning.py:451: Use of eval() function",
+      "spatial_omics_gfm/training/scalable_distributed_training.py:1095: Use of eval() function",
+      "spatial_omics_gfm/utils/optimization.py:117: Use of eval() function",
+      "spatial_omics_gfm/utils/optimization.py:251: Use of eval() function",
+      "spatial_omics_gfm/utils/optimization.py:293: Use of eval() function",
+      "spatial_omics_gfm/utils/optimization.py:405: Use of eval() function",
+      "spatial_omics_gfm/utils/optimization.py:462: Use of eval() function",
+      "spatial_omics_gfm/utils/optimization.py:541: Use of eval() function",
+      "spatial_omics_gfm/utils/optimization.py:614: Use of eval() function",
+      "spatial_omics_gfm/utils/advanced_caching.py:1256: Use of eval() function",
+      "spatial_omics_gfm/utils/advanced_caching.py:40: Dynamic import usage",
+      "spatial_omics_gfm/utils/advanced_caching.py:635: Unsafe pickle.loads usage",
+      "spatial_omics_gfm/utils/advanced_caching.py:763: Unsafe pickle.loads usage",
+      "spatial_omics_gfm/utils/cuda_kernels.py:24: Dynamic import usage"
+    ],
+    "metrics": {
+      "files_scanned": 83,
+      "security_issues": 39
+    }
+  },
+  "documentation": {
+    "passed": true,
+    "errors": [
+      "spatial_omics_gfm/models/graph_transformer.py:47: FunctionDef '__init__' lacks docstring",
+      "spatial_omics_gfm/models/graph_transformer.py:101: FunctionDef '__init__' lacks docstring",
+      "spatial_omics_gfm/models/graph_transformer.py:179: FunctionDef '__init__' lacks docstring",
+      "spatial_omics_gfm/tasks/cell_typing.py:37: FunctionDef '__init__' lacks docstring",
+      "spatial_omics_gfm/tasks/cell_typing.py:271: FunctionDef '__init__' lacks docstring",
+      "spatial_omics_gfm/tasks/cell_typing.py:554: FunctionDef '__init__' lacks docstring"
+    ],
+    "metrics": {
+      "missing_docs": 0,
+      "doc_coverage": 90.16,
+      "undocumented_functions": 6,
+      "total_functions": 61
+    }
+  },
+  "test_coverage": {
+    "passed": true,
+    "errors": [],
+    "metrics": {
+      "test_files": 7,
+      "test_functions": 194,
+      "missing_test_files": 0,
+      "source_files": 61
+    }
+  },
+  "performance": {
+    "passed": false,
+    "errors": [
+      "spatial_omics_gfm/research/advanced_benchmarking.py:1045: List append in loop - consider list comprehension",
+      "spatial_omics_gfm/research/advanced_benchmarking.py:1047: Inefficient dict iteration pattern",
+      "spatial_omics_gfm/tasks/cell_typing.py:310: List append in loop - consider list comprehension",
+      "spatial_omics_gfm/utils/enhanced_memory_management.py:334: List append in loop - consider list comprehension"
+    ],
+    "metrics": {
+      "files_checked": 61,
+      "performance_issues": 4
+    }
+  },
+  "overall_passed": false
+}

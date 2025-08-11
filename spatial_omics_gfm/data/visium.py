@@ -341,7 +341,7 @@ class VisiumDataset(BaseSpatialDataset):
         
         # Match barcodes between expression and spatial data
         common_barcodes = positions_df.index.intersection(self.adata.obs.index)
-        if len(common_barcodes) == 0:
+        if not common_barcodes:
             logger.warning("No matching barcodes found, attempting barcode matching")
             common_barcodes = self._match_barcodes(positions_df.index, self.adata.obs.index)
         

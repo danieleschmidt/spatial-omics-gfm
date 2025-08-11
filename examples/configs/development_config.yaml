@@ -1,0 +1,128 @@
+# Development Configuration for Spatial-Omics GFM
+# This configuration is optimized for development and testing with debugging features
+
+name: "spatial_gfm_development"
+description: "Development configuration with debugging and testing features"
+version: "2.0.0"
+
+# Model Configuration (smaller for development)
+model:
+  num_genes: 1000                    # Smaller dataset for faster iteration
+  hidden_dim: 256                    # Smaller hidden dimension
+  num_layers: 6                      # Fewer layers for faster training
+  num_heads: 8                       # Number of attention heads
+  dropout: 0.2                       # Higher dropout for testing regularization
+  max_neighbors: 6                   # Maximum spatial neighbors
+  spatial_dim: 2                     # Spatial dimensions
+  use_positional_encoding: true      # Enable positional encoding
+  attention_bias_type: "spatial"     # Type of attention bias
+
+# Training Configuration (optimized for development)
+training:
+  batch_size: 8                      # Smaller batch size for development
+  learning_rate: 0.001               # Higher learning rate for faster convergence
+  weight_decay: 0.0001               # Weight decay
+  max_epochs: 50                     # Fewer epochs for development
+  patience: 10                       # Early stopping patience
+  gradient_clip_val: 1.0             # Gradient clipping
+  accumulate_grad_batches: 1         # No gradient accumulation
+  mixed_precision: false             # Disable mixed precision for debugging
+  checkpoint_every_n_epochs: 5       # More frequent checkpoints
+  validate_every_n_epochs: 1         # Validate every epoch
+
+# Data Processing Configuration
+data:
+  min_genes_per_cell: 50             # Lower thresholds for development data
+  min_cells_per_gene: 3              # Lower threshold
+  max_genes_per_cell: 5000           # Maximum genes per cell
+  min_counts_per_cell: 200           # Lower minimum counts
+  max_mitochondrial_pct: 25.0        # More lenient mitochondrial filtering
+  normalize: true                    # Normalize expression data
+  log_transform: true                # Apply log transformation
+  scale_coordinates: true            # Scale spatial coordinates
+  graph_construction_method: "knn"   # Graph construction method
+  k_neighbors: 6                     # Number of neighbors
+
+# System Configuration (development-friendly)
+system:
+  device: "cpu"                      # Use CPU for development (more consistent)
+  num_workers: 2                     # Fewer workers to avoid overwhelming dev machines
+  memory_limit_gb: 8.0               # Lower memory limit for dev machines
+  enable_memory_monitoring: true     # Enable monitoring for debugging
+  temp_directory: "./tmp"            # Local temp directory
+  log_level: "DEBUG"                 # Verbose logging for development
+  enable_profiling: true             # Enable profiling for optimization
+
+# Security Configuration (relaxed for development)
+security:
+  enable_input_validation: true      # Keep validation enabled for testing
+  enable_model_signing: false        # Disable signing for development
+  max_file_size_mb: 100              # Smaller file size limit
+  allowed_file_types:                # Same file types as production
+    - ".h5ad"
+    - ".h5"
+    - ".csv"
+    - ".tsv"
+    - ".json"
+    - ".yaml"
+    - ".yml"
+  enable_checksum_validation: false  # Disable for faster development
+
+# Custom Parameters for Development
+custom_params:
+  # Development-specific validation
+  validation:
+    strict_mode: true                # Enable strict mode for catching issues
+    auto_fix: true                   # Auto-fix issues for smoother development
+    max_warnings: 50                 # Fewer warnings threshold
+    validation_timeout: 60           # Shorter timeout for development
+    enable_adversarial_detection: true # Keep enabled for testing
+    
+  # Enhanced monitoring for debugging
+  monitoring:
+    metrics_retention_hours: 2       # Shorter retention for development
+    alert_check_interval: 10         # More frequent alert checking
+    dashboard_update_interval: 5     # Faster dashboard updates
+    enable_system_alerts: true       # Enable alerts for resource monitoring
+    enable_detailed_profiling: true  # Enable detailed profiling
+    
+  # Memory management (conservative for dev)
+  memory:
+    adaptive_batching: true          # Test adaptive batching
+    resource_pooling: true           # Test resource pooling
+    target_memory_usage: 0.6         # Conservative memory usage (60%)
+    gc_frequency_adaptive: true      # Test adaptive GC
+    enable_memory_mapping: false     # Disable for simpler debugging
+    
+  # Performance settings for development
+  performance:
+    enable_torch_compile: false      # Disable compilation for easier debugging
+    mixed_precision_level: "O0"      # No mixed precision optimization
+    dataloader_pin_memory: false     # Disable for CPU development
+    persistent_workers: false        # Don't persist workers
+    
+  # Comprehensive error handling for debugging
+  error_handling:
+    max_retries: 1                   # Minimal retries for faster failure feedback
+    exponential_backoff: false       # No backoff for development
+    enable_graceful_degradation: true # Test graceful degradation
+    error_reporting: true            # Full error reporting
+    detailed_stack_traces: true      # Enable detailed stack traces
+    
+  # Development and testing features
+  development:
+    enable_data_validation_tests: true # Enable comprehensive data tests
+    enable_model_architecture_tests: true # Test model architecture
+    enable_integration_tests: true   # Enable integration testing
+    save_intermediate_results: true  # Save intermediate results for debugging
+    enable_visualization_debug: true # Enable debug visualizations
+    test_mode: true                  # Enable test mode features
+    
+  # Debugging configuration
+  debugging:
+    log_model_parameters: true       # Log model parameter statistics
+    log_gradient_norms: true         # Log gradient norms during training
+    log_memory_usage: true           # Detailed memory usage logging
+    save_attention_weights: true     # Save attention weights for analysis
+    enable_nan_detection: true       # Enable NaN detection in tensors
+    profile_data_loading: true       # Profile data loading performance

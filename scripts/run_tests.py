@@ -386,7 +386,7 @@ class TestRunner:
         if failed_tests > self.quality_gates['max_failed_tests']:
             violations.append(f"{failed_tests} test categories failed")
         
-        passed = len(violations) == 0
+        passed = not violations
         
         if passed:
             logger.info("All quality gates passed")

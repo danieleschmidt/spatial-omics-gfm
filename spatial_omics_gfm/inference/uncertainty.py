@@ -705,7 +705,7 @@ class UncertaintyQuantification:
                 bin_confidences.append(bin_confidence)
                 bin_counts.append(bin_count)
         
-        if len(bin_accuracies) == 0:
+        if not bin_accuracies:
             return {'ece': 0.0, 'mce': 0.0}
         
         bin_accuracies = np.array(bin_accuracies)

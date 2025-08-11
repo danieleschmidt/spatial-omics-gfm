@@ -1,0 +1,115 @@
+# Production Configuration for Spatial-Omics GFM
+# This configuration is optimized for production deployments with enhanced robustness features
+
+name: "spatial_gfm_production"
+description: "Production configuration with full robustness features enabled"
+version: "2.0.0"
+
+# Model Configuration
+model:
+  num_genes: 5000                    # Number of genes in dataset
+  hidden_dim: 1024                   # Hidden dimension (divisible by num_heads)
+  num_layers: 24                     # Number of transformer layers
+  num_heads: 16                      # Number of attention heads
+  dropout: 0.1                       # Dropout rate
+  max_neighbors: 6                   # Maximum spatial neighbors
+  spatial_dim: 2                     # Spatial dimensions (2D or 3D)
+  use_positional_encoding: true      # Enable positional encoding
+  attention_bias_type: "spatial"     # Type of attention bias
+
+# Training Configuration
+training:
+  batch_size: 32                     # Training batch size
+  learning_rate: 0.0001              # Learning rate
+  weight_decay: 0.00001              # Weight decay for regularization
+  max_epochs: 200                    # Maximum training epochs
+  patience: 20                       # Early stopping patience
+  gradient_clip_val: 1.0             # Gradient clipping value
+  accumulate_grad_batches: 1         # Gradient accumulation steps
+  mixed_precision: true              # Use mixed precision training
+  checkpoint_every_n_epochs: 10      # Checkpoint frequency
+  validate_every_n_epochs: 1        # Validation frequency
+
+# Data Processing Configuration
+data:
+  min_genes_per_cell: 200            # Minimum genes per cell
+  min_cells_per_gene: 10             # Minimum cells per gene
+  max_genes_per_cell: 8000           # Maximum genes per cell (filter doublets)
+  min_counts_per_cell: 1000          # Minimum total counts per cell
+  max_mitochondrial_pct: 15.0        # Maximum mitochondrial gene percentage
+  normalize: true                    # Normalize expression data
+  log_transform: true                # Apply log transformation
+  scale_coordinates: true            # Scale spatial coordinates
+  graph_construction_method: "knn"   # Graph construction method
+  k_neighbors: 6                     # Number of neighbors for k-NN graph
+
+# System Configuration
+system:
+  device: "auto"                     # Computing device (auto, cpu, cuda)
+  num_workers: 8                     # Number of data loading workers
+  memory_limit_gb: 64.0              # Memory limit in GB
+  enable_memory_monitoring: true     # Enable memory monitoring
+  temp_directory: "/tmp/spatial_gfm" # Temporary directory for processing
+  log_level: "INFO"                  # Logging level (DEBUG, INFO, WARNING, ERROR)
+  enable_profiling: true             # Enable performance profiling
+
+# Security Configuration
+security:
+  enable_input_validation: true      # Enable comprehensive input validation
+  enable_model_signing: true         # Enable model signing for integrity
+  max_file_size_mb: 5000             # Maximum file size in MB
+  allowed_file_types:                # Allowed file extensions
+    - ".h5ad"
+    - ".h5"
+    - ".csv"
+    - ".tsv"
+    - ".json"
+    - ".yaml"
+    - ".yml"
+  enable_checksum_validation: true   # Enable file checksum validation
+
+# Custom Parameters for Production
+custom_params:
+  # Robustness settings
+  validation:
+    strict_mode: false               # Strict validation mode
+    auto_fix: true                   # Automatically fix common issues
+    max_warnings: 100                # Maximum warnings before failing
+    validation_timeout: 300          # Validation timeout in seconds
+    enable_adversarial_detection: true # Enable adversarial input detection
+    
+  # Monitoring settings
+  monitoring:
+    metrics_retention_hours: 24      # How long to keep metrics
+    alert_check_interval: 30         # Alert checking interval in seconds
+    dashboard_update_interval: 10    # Dashboard update interval in seconds
+    enable_system_alerts: true      # Enable system resource alerts
+    
+  # Memory management
+  memory:
+    adaptive_batching: true          # Enable adaptive batch sizing
+    resource_pooling: true           # Enable tensor/array pooling
+    target_memory_usage: 0.8         # Target memory usage (80%)
+    gc_frequency_adaptive: true      # Adaptive garbage collection
+    enable_memory_mapping: true      # Enable memory mapping for large files
+    
+  # Performance optimization
+  performance:
+    enable_torch_compile: true       # Enable PyTorch 2.0 compilation
+    mixed_precision_level: "O1"      # Mixed precision optimization level
+    dataloader_pin_memory: true      # Pin memory for data loading
+    persistent_workers: true         # Keep data loading workers persistent
+    
+  # Error handling and recovery
+  error_handling:
+    max_retries: 3                   # Maximum retry attempts
+    exponential_backoff: true        # Use exponential backoff for retries
+    enable_graceful_degradation: true # Enable graceful degradation
+    error_reporting: true            # Enable error reporting
+    
+  # Model deployment
+  deployment:
+    enable_model_versioning: true    # Enable model versioning
+    auto_scaling: true               # Enable auto-scaling based on load
+    health_check_interval: 60        # Health check interval in seconds
+    enable_a_b_testing: false        # Enable A/B testing framework

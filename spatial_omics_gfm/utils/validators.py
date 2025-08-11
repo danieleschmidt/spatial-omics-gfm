@@ -98,7 +98,7 @@ class SpatialDataValidator:
             self._validate_metadata(adata, validation_report)
             
             # Final validation status
-            validation_report['is_valid'] = len(validation_report['errors']) == 0
+            validation_report['is_valid'] = not validation_report['errors']
             
         except Exception as e:
             validation_report['is_valid'] = False
@@ -495,7 +495,7 @@ class ModelInputValidator:
             gene_expression, spatial_coords, edge_index, report
         )
         
-        report['is_valid'] = len(report['errors']) == 0
+        report['is_valid'] = not report['errors']
         
         return report
     
@@ -751,6 +751,6 @@ def validate_model_config(config: Dict[str, Any]) -> Dict[str, Any]:
         if not (0 <= config['dropout'] <= 1):
             report['errors'].append("dropout must be between 0 and 1")
     
-    report['is_valid'] = len(report['errors']) == 0
+    report['is_valid'] = not report['errors']
     
     return report

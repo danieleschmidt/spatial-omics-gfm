@@ -426,7 +426,7 @@ class TissueSegmenter(BaseTask):
                 small_region_mask = region_assignments == small_region
                 small_region_coords = coords[small_region_mask]
                 
-                if len(small_region_coords) == 0:
+                if not small_region_coords:
                     continue
                 
                 # Find centroid of small region
@@ -508,7 +508,7 @@ class TissueSegmenter(BaseTask):
             region_coords = coords[region_mask]
             region_expression = expression[region_mask]
             
-            if len(region_coords) == 0:
+            if not region_coords:
                 continue
             
             # Spatial properties
