@@ -151,8 +151,8 @@ class SpatialAttention(MessagePassing):
         q_i: torch.Tensor,
         k_j: torch.Tensor,
         v_j: torch.Tensor,
-        edge_attr: Optional[torch.Tensor] = None,
         index: torch.Tensor,
+        edge_attr: Optional[torch.Tensor] = None,
         ptr: Optional[torch.Tensor] = None,
         size_i: Optional[int] = None
     ) -> torch.Tensor:
