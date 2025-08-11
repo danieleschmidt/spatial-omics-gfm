@@ -288,7 +288,7 @@ class XeniumDataset(BaseSpatialDataset):
         
         # Match cell IDs between expression and metadata
         common_cells = cells_df.index.intersection(self.adata.obs.index)
-        if len(common_cells) == 0:
+        if not common_cells:
             logger.warning("No matching cell IDs found, attempting cell ID matching")
             common_cells = self._match_cell_ids(cells_df.index, self.adata.obs.index)
         

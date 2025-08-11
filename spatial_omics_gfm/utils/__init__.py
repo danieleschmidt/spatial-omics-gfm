@@ -6,6 +6,20 @@ the package for data processing, validation, and analysis.
 """
 
 from .validators import SpatialDataValidator, ModelInputValidator, validate_file_format, validate_model_config
+from .enhanced_validators import (
+    RobustValidator, ValidationConfig, ValidationResult, ValidationException,
+    DataIntegrityValidator, AdversarialInputDetector, FilePathSanitizer,
+    validate_model_config_robust
+)
+from .security import (
+    SecurityConfig, InputSanitizer, SecureFileHandler, ModelSecurity,
+    sanitize_user_input, secure_file_operation, create_security_context
+)
+from .config_manager import (
+    ConfigManager, ExperimentConfig, ModelConfig, TrainingConfig,
+    DataConfig, SystemConfig, SecurityConfig as SecurityConfigClass,
+    create_default_config, load_config_from_file, validate_config_file
+)
 from .helpers import compute_spatial_distance, normalize_coordinates
 from .metrics import SpatialMetrics, evaluate_model_performance
 from .logging_config import setup_logging, SpatialOmicsLogger, LoggedOperation
@@ -16,10 +30,44 @@ from .memory_management import (
 )
 
 __all__ = [
+    # Original validators
     "SpatialDataValidator",
     "ModelInputValidator",
     "validate_file_format", 
     "validate_model_config",
+    
+    # Enhanced validation and robustness
+    "RobustValidator",
+    "ValidationConfig",
+    "ValidationResult",
+    "ValidationException",
+    "DataIntegrityValidator",
+    "AdversarialInputDetector",
+    "FilePathSanitizer",
+    "validate_model_config_robust",
+    
+    # Security utilities
+    "SecurityConfig",
+    "InputSanitizer",
+    "SecureFileHandler",
+    "ModelSecurity",
+    "sanitize_user_input",
+    "secure_file_operation",
+    "create_security_context",
+    
+    # Configuration management
+    "ConfigManager",
+    "ExperimentConfig",
+    "ModelConfig",
+    "TrainingConfig",
+    "DataConfig",
+    "SystemConfig",
+    "SecurityConfigClass",
+    "create_default_config",
+    "load_config_from_file",
+    "validate_config_file",
+    
+    # Original utilities
     "compute_spatial_distance",
     "normalize_coordinates", 
     "SpatialMetrics",

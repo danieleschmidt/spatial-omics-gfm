@@ -171,7 +171,7 @@ class HierarchicalPooling(nn.Module):
             while remaining_nodes.sum() > 0:
                 # Select a random unclustered node as cluster center
                 available_indices = torch.where(remaining_nodes)[0]
-                if len(available_indices) == 0:
+                if not available_indices:
                     break
                 
                 center_idx = available_indices[0]  # Take first available
@@ -488,7 +488,7 @@ class AdaptiveHierarchicalPooling(nn.Module):
             
             while remaining_nodes.sum() > 0:
                 available_indices = torch.where(remaining_nodes)[0]
-                if len(available_indices) == 0:
+                if not available_indices:
                     break
                 
                 center_idx = available_indices[0]

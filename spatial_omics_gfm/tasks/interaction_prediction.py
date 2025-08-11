@@ -412,7 +412,7 @@ class InteractionPredictor(BaseTask):
         """Compute statistical significance of interactions."""
         logger.info("Computing interaction significance")
         
-        if len(lr_results) == 0:
+        if not lr_results:
             return {'p_values': [], 'significant_interactions': pd.DataFrame()}
         
         # Perform permutation test for each L-R pair
@@ -427,7 +427,7 @@ class InteractionPredictor(BaseTask):
                 (lr_results['receptor'] == receptor)
             ]
             
-            if len(pair_results) == 0:
+            if not pair_results:
                 continue
             
             observed_scores = pair_results['interaction_score'].values

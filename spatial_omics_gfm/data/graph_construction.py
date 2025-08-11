@@ -586,7 +586,7 @@ class SpatialGraphBuilder:
         report['n_isolated_nodes'] = len(isolated_nodes)
         
         # Check connectivity if requested
-        if check_connectivity and len(isolated_nodes) == 0:
+        if check_connectivity and not isolated_nodes:
             adj_matrix = csr_matrix(
                 (np.ones(edge_index.shape[1]),
                  (edge_index[0].numpy(), edge_index[1].numpy())),

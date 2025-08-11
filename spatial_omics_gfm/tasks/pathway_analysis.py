@@ -891,7 +891,7 @@ class SpatialPathwayAnalyzer(PathwayAnalyzer):
     
     def _analyze_pathway_boundaries(self, transitions_df: pd.DataFrame) -> Dict[str, Any]:
         """Analyze pathway boundary zones."""
-        if len(transitions_df) == 0:
+        if not transitions_df:
             return {'boundary_zones': [], 'transition_frequencies': pd.DataFrame()}
         
         # Count transition frequencies between pathway pairs

@@ -118,7 +118,7 @@ class TestModelInputValidator:
         is_valid = validator.validate_model_inputs(**sample_batch_data)
         
         assert is_valid == True
-        assert len(validator.validation_errors) == 0
+        assert not validator.validation_errors
     
     def test_validate_model_inputs_invalid_shape(self, sample_batch_data):
         """Test validation with invalid tensor shapes."""
@@ -142,7 +142,7 @@ class TestModelInputValidator:
         errors = validator._validate_tensor_properties(
             valid_tensor, 'test_tensor', expected_shape=(10, 5)
         )
-        assert len(errors) == 0
+        assert not errors
         
         # Invalid shape
         errors = validator._validate_tensor_properties(
@@ -164,7 +164,7 @@ class TestFileFormatValidation:
         is_valid, errors = validate_file_format(h5ad_path, 'h5ad')
         
         assert is_valid == True
-        assert len(errors) == 0
+        assert not errors
     
     def test_validate_nonexistent_file(self, temp_dir):
         """Test validation of non-existent file."""

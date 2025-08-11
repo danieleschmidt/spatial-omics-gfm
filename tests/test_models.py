@@ -417,7 +417,7 @@ class TestModelServer:
         
         # Clear cache
         server.clear_cache()
-        assert len(server.cache) == 0
+        assert not server.cache
 
 
 class TestEdgeDeployment:

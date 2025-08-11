@@ -510,7 +510,7 @@ class MERFISHDataset(BaseSpatialDataset):
     
     def _apply_blank_correction(self) -> None:
         """Apply blank probe correction to remove background signal."""
-        if self.blank_probes is None or len(self.blank_probes) == 0:
+        if self.blank_probes is None or not self.blank_probes:
             logger.warning("No blank probes available for correction")
             return
         

@@ -353,7 +353,7 @@ class SpatialPlotter:
                             edgecolors='none'
                         )
             
-            ax2.set_title(f'High Confidence (≥{threshold})')\n        
+            ax2.set_title(f'High Confidence (≥{threshold})')
         elif overlay_type == "uncertainty" and 'uncertainty' in predictions:
             scatter = ax2.scatter(
                 spatial_coords[:, 0],
