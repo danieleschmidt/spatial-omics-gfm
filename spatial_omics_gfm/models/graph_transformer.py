@@ -6,11 +6,28 @@ tissue sections as graphs where cells are nodes and spatial proximity defines ed
 """
 
 import math
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-from torch_geometric.nn import MessagePassing, global_mean_pool
-from torch_geometric.utils import add_self_loops, degree
+try:
+    import torch
+    import torch.nn as nn
+    import torch.nn.functional as F
+    from torch_geometric.nn import MessagePassing, global_mean_pool
+    from torch_geometric.utils import add_self_loops, degree
+    TORCH_AVAILABLE = True
+except ImportError:
+    # Fallback for when dependencies are not available
+    TORCH_AVAILABLE = False
+    class MockModule:
+        def __init__(self, *args, **kwargs):
+            pass
+        def __getattr__(self, name):
+            return MockModule
+    torch = MockModule()
+    nn = MockModule()
+    F = MockModule()
+    MessagePassing = MockModule
+    global_mean_pool = MockModule
+    add_self_loops = MockModule
+    degree = MockModule
 from typing import Optional, Tuple, Dict, Any, List
 from dataclasses import dataclass
 import warnings
@@ -167,7 +184,7 @@ class SpatialTransformerLayer(nn.Module):
         return x
 
 
-class SpatialGraphTransformer(nn.Module):
+class SpatialGraphTransformer(nn.Module if TORCH_AVAILABLE else object):
     """
     Billion-parameter Graph Foundation Model for Spatial Transcriptomics.
     
