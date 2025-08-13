@@ -1,0 +1,137 @@
+{
+  "overall_status": "NOT_READY",
+  "readiness_score": 59.01738612651825,
+  "assessments": {
+    "infrastructure": {
+      "score": 27.139089012145995,
+      "max_score": 100,
+      "details": {
+        "system_resources": {
+          "memory_gb": 3.8496856689453125,
+          "cpu_cores": 2,
+          "disk_space_gb": 11.400043487548828
+        },
+        "python_version": "3.12.3",
+        "gpu_available": false
+      },
+      "summary": "Infrastructure score: 27.139089012145995/100 (RAM: 3.8GB, CPU: 2 cores)"
+    },
+    "scalability": {
+      "score": 0,
+      "max_score": 100,
+      "details": {
+        "stateless_operations": true,
+        "batch_processing_time": 0.002016305923461914,
+        "memory_efficiency": true,
+        "memory_delta_mb": 1.5703125
+      },
+      "error": "'NoneType' object has no attribute 'get'",
+      "summary": "Scalability assessment failed: 'NoneType' object has no attribute 'get'"
+    },
+    "performance": {
+      "score": 100,
+      "max_score": 100,
+      "details": {
+        "data_loading_time": 0.3839067910000722,
+        "cell_typing_time": 0.0010088679998716543,
+        "interaction_time": 0.36118738699997266,
+        "interactions_found": 49990,
+        "peak_memory_mb": 63.2578125,
+        "throughput_time": 0.02674063200015553,
+        "datasets_per_second": 186.98136977356853
+      },
+      "summary": "Performance benchmarks: 100/100 (load: 0.38s, predict: 0.00s)"
+    },
+    "security": {
+      "score": 75.0,
+      "max_score": 100,
+      "details": {
+        "sanitization_rate": 0.8,
+        "safe_files_rate": 1.0,
+        "secure_coding_rate": 0.7,
+        "security_issues": [
+          "run_quality_gates.py: eval(",
+          "run_quality_gates.py: exec(",
+          "run_quality_gates.py: __import__",
+          "run_quality_gates.py: subprocess.call",
+          "production_readiness_check.py: eval("
+        ],
+        "secrets_in_code": 4,
+        "secret_issues": [
+          "production_readiness_check.py: password",
+          "production_readiness_check.py: api_key",
+          "production_readiness_check.py: secret"
+        ]
+      },
+      "summary": "Security hardening: 75.0/100 (sanitization: 4/5)"
+    },
+    "monitoring": {
+      "score": 100,
+      "max_score": 100,
+      "details": {
+        "performance_monitoring": true,
+        "health_check_available": true,
+        "current_health": {
+          "memory_usage_percent": 15.9,
+          "disk_usage_percent": 51.4,
+          "healthy": true
+        },
+        "metrics_collection": true
+      },
+      "summary": "Monitoring ready: 100/100 (logging: \u2713, health: \u2713, metrics: \u2713)"
+    },
+    "deployment": {
+      "score": 70,
+      "max_score": 100,
+      "details": {
+        "docker_files": true,
+        "kubernetes_files": true,
+        "ci_cd_files": false,
+        "config_management": true,
+        "environment_config": false,
+        "deployment_docs": true
+      },
+      "summary": "Deployment automation: 70/100 (Docker: True, K8s: True)"
+    },
+    "disaster_recovery": {
+      "score": 25,
+      "max_score": 100,
+      "details": {
+        "backup_scripts": false,
+        "restore_procedures": false,
+        "data_persistence": true,
+        "monitoring_alerting": false
+      },
+      "summary": "Disaster recovery: 25/100 (backup: False, restore: False)"
+    },
+    "documentation": {
+      "score": 75,
+      "max_score": 100,
+      "details": {
+        "documentation_files": [
+          "README.md",
+          "DEPLOYMENT_GUIDE.md",
+          "CONTRIBUTING.md",
+          "LICENSE"
+        ],
+        "doc_coverage_percent": 57.14285714285714,
+        "api_documentation": false,
+        "example_count": 8
+      },
+      "summary": "Documentation: 75/100 (4/7 docs, 8 examples)"
+    }
+  },
+  "recommendations": [
+    "Consider upgrading system resources (RAM, CPU, storage)",
+    "Implement better caching and batch processing optimization",
+    "Enhance input validation and security practices",
+    "Add containerization and CI/CD automation",
+    "Implement backup and disaster recovery procedures",
+    "Complete documentation and API references",
+    "Run full test suite including load testing",
+    "Conduct security audit and penetration testing",
+    "Set up staging environment for testing"
+  ],
+  "deployment_ready": false,
+  "timestamp": 1755058759.061498
+}
