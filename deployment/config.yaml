@@ -1,0 +1,166 @@
+# Production Deployment Configuration
+# Complete configuration for global production deployment
+
+# Container Registry Configuration
+registry:
+  type: "docker_hub"
+  repository: "spatial-omics-gfm"
+  auth:
+    username: "${DOCKER_USERNAME}"
+    password: "${DOCKER_PASSWORD}"
+
+# Kubernetes Configuration
+kubernetes:
+  cluster_name: "spatial-omics-cluster"
+  namespace: "spatial-omics"
+  config_path: "~/.kube/config"
+  
+  # Resource quotas
+  resource_quotas:
+    cpu: "20"
+    memory: "40Gi"
+    storage: "100Gi"
+    pods: "50"
+
+# Monitoring Configuration
+monitoring:
+  prometheus:
+    url: "http://prometheus:9090"
+    retention: "30d"
+    scrape_interval: "15s"
+  
+  grafana:
+    url: "http://grafana:3000"
+    admin_user: "${GRAFANA_ADMIN_USER}"
+    admin_password: "${GRAFANA_ADMIN_PASSWORD}"
+  
+  alertmanager:
+    url: "http://alertmanager:9093"
+    slack_webhook: "${SLACK_WEBHOOK_URL}"
+    email_smtp: "${SMTP_SERVER}"
+
+# Load Balancer Configuration
+load_balancer:
+  type: "nginx"
+  ssl_enabled: true
+  cert_manager: true
+  rate_limiting:
+    enabled: true
+    requests_per_minute: 1000
+    burst: 50
+
+# Environment-specific configurations
+environments:
+  development:
+    replicas: 1
+    resources:
+      cpu: "100m"
+      memory: "256Mi"
+    auto_scaling:
+      enabled: false
+    monitoring:
+      sampling_rate: 0.1
+  
+  staging:
+    replicas: 2
+    resources:
+      cpu: "500m"
+      memory: "1Gi"
+    auto_scaling:
+      enabled: true
+      min_replicas: 2
+      max_replicas: 5
+      target_cpu: 70
+    monitoring:
+      sampling_rate: 0.5
+  
+  production:
+    replicas: 3
+    resources:
+      cpu: "1000m"
+      memory: "2Gi"
+    auto_scaling:
+      enabled: true
+      min_replicas: 3
+      max_replicas: 10
+      target_cpu: 70
+    monitoring:
+      sampling_rate: 1.0
+
+# Global deployment regions
+regions:
+  us_east_1:
+    provider: "aws"
+    zone: "us-east-1"
+    compliance: ["ccpa", "hipaa"]
+    languages: ["en", "es"]
+  
+  eu_west_1:
+    provider: "aws"
+    zone: "eu-west-1"
+    compliance: ["gdpr"]
+    languages: ["en", "de", "fr", "it"]
+  
+  asia_southeast_1:
+    provider: "aws"
+    zone: "ap-southeast-1"
+    compliance: ["pdpa"]
+    languages: ["en", "zh", "ja", "ko"]
+
+# Security Configuration
+security:
+  encryption:
+    data_at_rest: true
+    data_in_transit: true
+    key_rotation_days: 90
+  
+  network_policies:
+    enabled: true
+    default_deny: true
+  
+  pod_security:
+    enabled: true
+    standards: ["restricted"]
+  
+  secrets_management:
+    provider: "kubernetes"
+    auto_rotation: true
+
+# Backup Configuration
+backup:
+  enabled: true
+  schedule: "0 2 * * *"  # Daily at 2 AM
+  retention_days: 30
+  storage:
+    type: "s3"
+    bucket: "spatial-omics-backups"
+    encryption: true
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  structured: true
+  outputs:
+    - "stdout"
+    - "elasticsearch"
+  
+  elasticsearch:
+    url: "http://elasticsearch:9200"
+    index_pattern: "spatial-omics-*"
+    retention_days: 30
+
+# Performance Configuration
+performance:
+  connection_pooling:
+    enabled: true
+    max_connections: 100
+  
+  caching:
+    enabled: true
+    type: "redis"
+    ttl: 3600
+  
+  database:
+    connection_timeout: 30
+    query_timeout: 60
+    pool_size: 20
