@@ -1,0 +1,581 @@
+# Complete Kubernetes deployment for Spatial-Omics GFM
+# Production-ready configuration with auto-scaling, monitoring, and security
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: spatial-omics
+  labels:
+    name: spatial-omics
+    environment: production
+
+---
+# ConfigMap for application configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: spatial-gfm-config
+  namespace: spatial-omics
+data:
+  LOG_LEVEL: "INFO"
+  ENVIRONMENT: "production"
+  WORKERS: "4"
+  PORT: "8000"
+
+---
+# Secret for sensitive configuration
+apiVersion: v1
+kind: Secret
+metadata:
+  name: spatial-gfm-secrets
+  namespace: spatial-omics
+type: Opaque
+data:
+  # Base64 encoded values - replace with actual secrets
+  DATABASE_URL: cG9zdGdyZXNxbDovL3VzZXI6cGFzc0BkYi5leGFtcGxlLmNvbS9zcGF0aWFsX29taWNz
+  REDIS_URL: cmVkaXM6Ly9yZWRpcy5leGFtcGxlLmNvbTo2Mzc5
+
+---
+# Deployment for API service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spatial-gfm-api
+  namespace: spatial-omics
+  labels:
+    app: spatial-gfm-api
+    component: api
+    version: v1
+spec:
+  replicas: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: spatial-gfm-api
+  template:
+    metadata:
+      labels:
+        app: spatial-gfm-api
+        component: api
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8000"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: spatial-gfm
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: api
+        image: spatial-omics-gfm/api:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8000
+          protocol: TCP
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: spatial-gfm-config
+              key: PORT
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: spatial-gfm-config
+              key: LOG_LEVEL
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: spatial-gfm-config
+              key: ENVIRONMENT
+        - name: WORKERS
+          valueFrom:
+            configMapKeyRef:
+              name: spatial-gfm-config
+              key: WORKERS
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: spatial-gfm-secrets
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: spatial-gfm-secrets
+              key: REDIS_URL
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: app-logs
+          mountPath: /app/logs
+        - name: app-data
+          mountPath: /app/data
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+      - name: app-data
+        persistentVolumeClaim:
+          claimName: spatial-gfm-data
+
+---
+# Deployment for Worker service
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spatial-gfm-worker
+  namespace: spatial-omics
+  labels:
+    app: spatial-gfm-worker
+    component: worker
+    version: v1
+spec:
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 2
+      maxUnavailable: 1
+  selector:
+    matchLabels:
+      app: spatial-gfm-worker
+  template:
+    metadata:
+      labels:
+        app: spatial-gfm-worker
+        component: worker
+        version: v1
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8001"
+        prometheus.io/path: "/metrics"
+    spec:
+      serviceAccountName: spatial-gfm
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+      - name: worker
+        image: spatial-omics-gfm/worker:latest
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8001
+          protocol: TCP
+        env:
+        - name: LOG_LEVEL
+          valueFrom:
+            configMapKeyRef:
+              name: spatial-gfm-config
+              key: LOG_LEVEL
+        - name: ENVIRONMENT
+          valueFrom:
+            configMapKeyRef:
+              name: spatial-gfm-config
+              key: ENVIRONMENT
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: spatial-gfm-secrets
+              key: DATABASE_URL
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: spatial-gfm-secrets
+              key: REDIS_URL
+        - name: WORKER_CONCURRENCY
+          value: "4"
+        - name: QUEUE_BACKEND
+          value: "redis"
+        resources:
+          requests:
+            memory: "2Gi"
+            cpu: "1000m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: http
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 10
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        volumeMounts:
+        - name: app-logs
+          mountPath: /app/logs
+        - name: app-data
+          mountPath: /app/data
+        - name: model-cache
+          mountPath: /app/models
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+          readOnlyRootFilesystem: true
+      volumes:
+      - name: app-logs
+        emptyDir: {}
+      - name: app-data
+        persistentVolumeClaim:
+          claimName: spatial-gfm-data
+      - name: model-cache
+        persistentVolumeClaim:
+          claimName: spatial-gfm-models
+
+---
+# Service for API
+apiVersion: v1
+kind: Service
+metadata:
+  name: spatial-gfm-api
+  namespace: spatial-omics
+  labels:
+    app: spatial-gfm-api
+    component: api
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8000
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: spatial-gfm-api
+
+---
+# Service for Worker
+apiVersion: v1
+kind: Service
+metadata:
+  name: spatial-gfm-worker
+  namespace: spatial-omics
+  labels:
+    app: spatial-gfm-worker
+    component: worker
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8001
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: spatial-gfm-worker
+
+---
+# ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: spatial-gfm
+  namespace: spatial-omics
+
+---
+# HorizontalPodAutoscaler for API
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: spatial-gfm-api-hpa
+  namespace: spatial-omics
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: spatial-gfm-api
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 10
+        periodSeconds: 60
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60
+
+---
+# HorizontalPodAutoscaler for Worker
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: spatial-gfm-worker-hpa
+  namespace: spatial-omics
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: spatial-gfm-worker
+  minReplicas: 5
+  maxReplicas: 20
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 75
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 85
+
+---
+# PersistentVolumeClaim for data
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: spatial-gfm-data
+  namespace: spatial-omics
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: fast-ssd
+
+---
+# PersistentVolumeClaim for models
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: spatial-gfm-models
+  namespace: spatial-omics
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 100Gi
+  storageClassName: fast-ssd
+
+---
+# Ingress for external access
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: spatial-gfm-ingress
+  namespace: spatial-omics
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rate-limit: "1000"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+spec:
+  tls:
+  - hosts:
+    - api.spatial-omics-gfm.com
+    secretName: spatial-gfm-tls
+  rules:
+  - host: api.spatial-omics-gfm.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: spatial-gfm-api
+            port:
+              number: 8000
+
+---
+# NetworkPolicy for security
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: spatial-gfm-network-policy
+  namespace: spatial-omics
+spec:
+  podSelector:
+    matchLabels:
+      app: spatial-gfm-api
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-nginx
+    ports:
+    - protocol: TCP
+      port: 8000
+  - from:
+    - podSelector:
+        matchLabels:
+          app: spatial-gfm-worker
+    ports:
+    - protocol: TCP
+      port: 8000
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app: spatial-gfm-worker
+    ports:
+    - protocol: TCP
+      port: 8001
+  - to: []
+    ports:
+    - protocol: TCP
+      port: 5432  # PostgreSQL
+    - protocol: TCP
+      port: 6379  # Redis
+    - protocol: TCP
+      port: 80    # HTTP
+    - protocol: TCP
+      port: 443   # HTTPS
+
+---
+# PodDisruptionBudget for API
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: spatial-gfm-api-pdb
+  namespace: spatial-omics
+spec:
+  minAvailable: 2
+  selector:
+    matchLabels:
+      app: spatial-gfm-api
+
+---
+# PodDisruptionBudget for Worker
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: spatial-gfm-worker-pdb
+  namespace: spatial-omics
+spec:
+  minAvailable: 3
+  selector:
+    matchLabels:
+      app: spatial-gfm-worker
+
+---
+# ServiceMonitor for Prometheus
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: spatial-gfm-metrics
+  namespace: spatial-omics
+  labels:
+    app: spatial-gfm
+spec:
+  selector:
+    matchLabels:
+      component: api
+  endpoints:
+  - port: http
+    path: /metrics
+    interval: 30s
+    scrapeTimeout: 10s
+
+---
+# PrometheusRule for alerting
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: spatial-gfm-alerts
+  namespace: spatial-omics
+spec:
+  groups:
+  - name: spatial-gfm.rules
+    rules:
+    - alert: SpatialGFMHighErrorRate
+      expr: rate(http_requests_total{job="spatial-gfm-api",status=~"5.."}[5m]) > 0.05
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: High error rate for Spatial-Omics GFM API
+        description: "Error rate is {{ $value | humanizePercentage }} for the last 5 minutes"
+    
+    - alert: SpatialGFMHighLatency
+      expr: histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job="spatial-gfm-api"}[5m])) > 2
+      for: 5m
+      labels:
+        severity: warning
+      annotations:
+        summary: High latency for Spatial-Omics GFM API
+        description: "95th percentile latency is {{ $value }}s"
+    
+    - alert: SpatialGFMPodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="spatial-omics"}[15m]) > 0
+      for: 5m
+      labels:
+        severity: critical
+      annotations:
+        summary: Pod is crash looping
+        description: "Pod {{ $labels.pod }} in namespace {{ $labels.namespace }} is crash looping"
