@@ -227,13 +227,16 @@ def create_demo_data(n_cells: int = 1000, n_genes: int = 500) -> SimpleSpatialDa
     return SimpleSpatialData(expression_matrix, coordinates, gene_names[:n_genes])
 
 
-def run_basic_analysis():
+def run_basic_analysis(data: Optional[SimpleSpatialData] = None):
     """Run a complete basic analysis to demonstrate functionality."""
     print("=== Spatial-Omics GFM Basic Analysis Demo ===")
     
-    # Create demo data
-    print("1. Creating synthetic spatial transcriptomics data...")
-    data = create_demo_data(n_cells=500, n_genes=100)
+    # Create or use provided demo data
+    if data is None:
+        print("1. Creating synthetic spatial transcriptomics data...")
+        data = create_demo_data(n_cells=500, n_genes=100)
+    else:
+        print("1. Using provided spatial transcriptomics data...")
     
     # Normalize data
     print("2. Normalizing expression data...")
