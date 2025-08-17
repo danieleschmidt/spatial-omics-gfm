@@ -5,17 +5,23 @@ This module provides utility functions for spatial computations,
 data transformations, and other common operations.
 """
 
-import torch
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    torch = None
+    TORCH_AVAILABLE = False
+
 import numpy as np
 from typing import Tuple, Union, Optional, List
 import warnings
 
 
 def compute_spatial_distance(
-    coords1: Union[torch.Tensor, np.ndarray],
-    coords2: Optional[Union[torch.Tensor, np.ndarray]] = None,
+    coords1: Union[np.ndarray, 'torch.Tensor'],
+    coords2: Optional[Union[np.ndarray, 'torch.Tensor']] = None,
     metric: str = "euclidean"
-) -> Union[torch.Tensor, np.ndarray]:
+) -> Union[np.ndarray, 'torch.Tensor']:
     """
     Compute spatial distances between coordinates.
     
@@ -30,6 +36,17 @@ def compute_spatial_distance(
     if coords2 is None:
         coords2 = coords1
     
+    # Convert to numpy if torch not available
+    if not TORCH_AVAILABLE:
+        if hasattr(coords1, 'detach'):  # torch tensor
+            coords1 = coords1.detach().cpu().numpy()
+        if hasattr(coords2, 'detach'):  # torch tensor
+            coords2 = coords2.detach().cpu().numpy()
+        
+        # Use numpy implementation
+        return _compute_distance_numpy(coords1, coords2, metric)
+    
+    # Use torch implementation if available
     if isinstance(coords1, np.ndarray):
         coords1 = torch.from_numpy(coords1).float()
     if isinstance(coords2, np.ndarray):
@@ -49,10 +66,26 @@ def compute_spatial_distance(
     return distances
 
 
+def _compute_distance_numpy(coords1: np.ndarray, coords2: np.ndarray, metric: str) -> np.ndarray:
+    """Numpy-based distance computation fallback."""
+    # Expand dimensions for broadcasting
+    coords1_expanded = coords1[:, np.newaxis, :]  # [N, 1, 2]
+    coords2_expanded = coords2[np.newaxis, :, :]  # [1, M, 2]
+    
+    if metric == "euclidean":
+        distances = np.linalg.norm(coords1_expanded - coords2_expanded, axis=2)
+    elif metric == "manhattan":
+        distances = np.sum(np.abs(coords1_expanded - coords2_expanded), axis=2)
+    else:
+        raise ValueError(f"Unknown metric: {metric}")
+    
+    return distances
+
+
 def normalize_coordinates(
-    coords: Union[torch.Tensor, np.ndarray],
+    coords: Union[np.ndarray, 'torch.Tensor'],
     method: str = "min_max"
-) -> Union[torch.Tensor, np.ndarray]:
+) -> Union[np.ndarray, 'torch.Tensor']:
     """
     Normalize spatial coordinates.
     
@@ -64,6 +97,10 @@ def normalize_coordinates(
         Normalized coordinates
     """
     is_numpy = isinstance(coords, np.ndarray)
+    
+    # Use numpy implementation if torch not available
+    if not TORCH_AVAILABLE:
+        return _normalize_coordinates_numpy(coords, method)
     
     if is_numpy:
         coords_tensor = torch.from_numpy(coords).float()
@@ -110,13 +147,112 @@ def normalize_coordinates(
     return normalized
 
 
-def create_spatial_graph(
-    coords: Union[torch.Tensor, np.ndarray],
+def _normalize_coordinates_numpy(coords: np.ndarray, method: str) -> np.ndarray:
+    """Numpy-based coordinate normalization fallback."""
+    if method == "min_max":
+        # Scale to [0, 1]
+        min_vals = np.min(coords, axis=0)
+        max_vals = np.max(coords, axis=0)
+        
+        # Avoid division by zero
+        ranges = max_vals - min_vals
+        ranges = np.where(ranges == 0, 1.0, ranges)
+        
+        normalized = (coords - min_vals) / ranges
+        
+    elif method == "z_score":
+        # Standard normalization
+        mean_vals = np.mean(coords, axis=0)
+        std_vals = np.std(coords, axis=0)
+        
+        # Avoid division by zero
+        std_vals = np.where(std_vals == 0, 1.0, std_vals)
+        
+        normalized = (coords - mean_vals) / std_vals
+        
+    elif method == "unit_circle":
+        # Scale to unit circle
+        center = np.mean(coords, axis=0)
+        centered = coords - center
+        
+        max_distance = np.max(np.linalg.norm(centered, axis=1))
+        if max_distance > 0:
+            normalized = centered / max_distance
+        else:
+            normalized = centered
+            
+    else:
+        raise ValueError(f"Unknown normalization method: {method}")
+    
+    return normalized
+
+
+def _create_spatial_graph_numpy(
+    coords: np.ndarray,
     method: str = "knn",
     k: int = 6,
     radius: Optional[float] = None,
     include_self: bool = False
-) -> Tuple[torch.Tensor, torch.Tensor]:
+) -> Tuple[np.ndarray, np.ndarray]:
+    """Numpy-based spatial graph creation fallback."""
+    num_nodes = coords.shape[0]
+    
+    # Compute distance matrix
+    distances = _compute_distance_numpy(coords, coords, "euclidean")
+    
+    if method == "knn":
+        # For each node, find k nearest neighbors
+        edge_list = []
+        edge_weights = []
+        
+        for i in range(num_nodes):
+            node_distances = distances[i]
+            if not include_self:
+                node_distances[i] = np.inf  # Exclude self
+            
+            # Get k nearest neighbors
+            nearest_indices = np.argsort(node_distances)[:k]
+            
+            for j in nearest_indices:
+                if node_distances[j] != np.inf:  # Valid neighbor
+                    edge_list.append([i, j])
+                    edge_weights.append(node_distances[j])
+        
+        edge_index = np.array(edge_list).T if edge_list else np.array([[], []])
+        edge_weights = np.array(edge_weights) if edge_weights else np.array([])
+        
+    elif method == "radius":
+        if radius is None:
+            radius = 1.0
+        
+        edge_list = []
+        edge_weights = []
+        
+        for i in range(num_nodes):
+            for j in range(num_nodes):
+                if i == j and not include_self:
+                    continue
+                
+                if distances[i, j] <= radius:
+                    edge_list.append([i, j])
+                    edge_weights.append(distances[i, j])
+        
+        edge_index = np.array(edge_list).T if edge_list else np.array([[], []])
+        edge_weights = np.array(edge_weights) if edge_weights else np.array([])
+        
+    else:
+        raise ValueError(f"Unknown graph method: {method}")
+    
+    return edge_index, edge_weights
+
+
+def create_spatial_graph(
+    coords: Union[np.ndarray, 'torch.Tensor'],
+    method: str = "knn",
+    k: int = 6,
+    radius: Optional[float] = None,
+    include_self: bool = False
+) -> Tuple[Union[np.ndarray, 'torch.Tensor'], Union[np.ndarray, 'torch.Tensor']]:
     """
     Create spatial graph from coordinates.
     
@@ -130,6 +266,10 @@ def create_spatial_graph(
     Returns:
         Tuple of (edge_index, edge_weights)
     """
+    if not TORCH_AVAILABLE:
+        # Use numpy fallback
+        return _create_spatial_graph_numpy(coords, method, k, radius, include_self)
+    
     if isinstance(coords, np.ndarray):
         coords = torch.from_numpy(coords).float()
     
@@ -177,11 +317,11 @@ def create_spatial_graph(
 
 
 def batch_process(
-    data: Union[torch.Tensor, np.ndarray],
+    data: Union[np.ndarray, 'torch.Tensor'],
     batch_size: int,
     process_fn: callable,
     **kwargs
-) -> List[Union[torch.Tensor, np.ndarray]]:
+) -> List[Union[np.ndarray, 'torch.Tensor']]:
     """
     Process data in batches.
     
@@ -208,10 +348,10 @@ def batch_process(
 
 
 def filter_low_count_features(
-    expression_matrix: Union[torch.Tensor, np.ndarray],
+    expression_matrix: Union[np.ndarray, 'torch.Tensor'],
     min_counts: int = 1,
     min_cells: int = 3
-) -> Tuple[Union[torch.Tensor, np.ndarray], np.ndarray]:
+) -> Tuple[Union[np.ndarray, 'torch.Tensor'], np.ndarray]:
     """
     Filter genes with low counts.
     
@@ -247,7 +387,7 @@ def filter_low_count_features(
 
 
 def compute_highly_variable_genes(
-    expression_matrix: Union[torch.Tensor, np.ndarray],
+    expression_matrix: Union[np.ndarray, 'torch.Tensor'],
     n_top_genes: int = 3000,
     flavor: str = "seurat"
 ) -> np.ndarray:
@@ -262,7 +402,7 @@ def compute_highly_variable_genes(
     Returns:
         Boolean mask for highly variable genes
     """
-    if isinstance(expression_matrix, torch.Tensor):
+    if TORCH_AVAILABLE and hasattr(expression_matrix, 'numpy'):
         expr_np = expression_matrix.numpy()
     else:
         expr_np = expression_matrix
@@ -297,9 +437,9 @@ def compute_highly_variable_genes(
 
 
 def safe_log_transform(
-    data: Union[torch.Tensor, np.ndarray],
+    data: Union[np.ndarray, 'torch.Tensor'],
     pseudocount: float = 1.0
-) -> Union[torch.Tensor, np.ndarray]:
+) -> Union[np.ndarray, 'torch.Tensor']:
     """
     Apply safe log transformation.
     
@@ -310,16 +450,16 @@ def safe_log_transform(
     Returns:
         Log-transformed data
     """
-    if isinstance(data, torch.Tensor):
+    if TORCH_AVAILABLE and hasattr(data, 'numpy'):
         return torch.log(data + pseudocount)
     else:
         return np.log(data + pseudocount)
 
 
 def standardize_features(
-    data: Union[torch.Tensor, np.ndarray],
+    data: Union[np.ndarray, 'torch.Tensor'],
     axis: int = 0
-) -> Union[torch.Tensor, np.ndarray]:
+) -> Union[np.ndarray, 'torch.Tensor']:
     """
     Standardize features to zero mean and unit variance.
     
@@ -330,7 +470,7 @@ def standardize_features(
     Returns:
         Standardized data
     """
-    if isinstance(data, torch.Tensor):
+    if TORCH_AVAILABLE and hasattr(data, 'numpy'):
         mean = torch.mean(data, dim=axis, keepdim=True)
         std = torch.std(data, dim=axis, keepdim=True)
         
