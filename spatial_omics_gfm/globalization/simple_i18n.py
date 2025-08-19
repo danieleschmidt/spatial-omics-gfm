@@ -234,6 +234,9 @@ class SimpleI18nManager:
         self.translations[locale].update(translations)
 
 
+# Alias for compatibility
+SimpleI18n = SimpleI18nManager
+
 # Global i18n manager instance
 _i18n_manager = SimpleI18nManager()
 

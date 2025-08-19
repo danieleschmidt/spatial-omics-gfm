@@ -11,7 +11,7 @@ from pathlib import Path
 logger = logging.getLogger(__name__)
 
 
-def sanitize_user_input_simple(user_input: str, context: str = "general") -> str:
+def sanitize_user_input(user_input: str, context: str = "general") -> str:
     """
     Simple user input sanitization without external dependencies.
     
@@ -65,7 +65,7 @@ def sanitize_user_input_simple(user_input: str, context: str = "general") -> str
     return sanitized
 
 
-def validate_file_path_simple(file_path: Union[str, Path], allowed_extensions: Optional[Set[str]] = None) -> Path:
+def validate_file_path(file_path: Union[str, Path], allowed_extensions: Optional[Set[str]] = None) -> bool:
     """
     Simple file path validation without external dependencies.
     
@@ -107,7 +107,32 @@ def validate_file_path_simple(file_path: Union[str, Path], allowed_extensions: O
     if resolved_path.suffix.lower() not in allowed_extensions:
         raise ValueError(f"File extension {resolved_path.suffix} not allowed")
     
-    return resolved_path
+    return True
+
+
+def is_safe_filename(filename: str) -> bool:
+    """
+    Check if a filename is safe (no path traversal, etc.).
+    
+    Args:
+        filename: Filename to check
+        
+    Returns:
+        True if safe, False otherwise
+    """
+    # Check for path traversal patterns
+    dangerous_patterns = [
+        r'\.\.[\\/]',      # Directory traversal
+        r'^[\\/]',         # Absolute paths
+        r'[<>:"|?*]',      # Windows illegal characters
+        r'[\x00-\x1f]',    # Control characters
+    ]
+    
+    for pattern in dangerous_patterns:
+        if re.search(pattern, filename):
+            return False
+    
+    return True
 
 
 def validate_data_integrity_simple(data: Any, shape_hint: Optional[tuple] = None) -> Dict[str, Any]:
@@ -182,8 +207,8 @@ def validate_data_integrity_simple(data: Any, shape_hint: Optional[tuple] = None
 def create_simple_security_context() -> Dict[str, Any]:
     """Create a simple security context without heavy dependencies."""
     return {
-        'sanitize_input': sanitize_user_input_simple,
-        'validate_path': validate_file_path_simple,
+        'sanitize_input': sanitize_user_input,
+        'validate_path': validate_file_path,
         'validate_data': validate_data_integrity_simple,
         'version': '1.0.0'
     }

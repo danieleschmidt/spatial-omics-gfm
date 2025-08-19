@@ -1,29 +1,29 @@
 {
   "overall_status": "NOT_READY",
-  "readiness_score": 59.01738612651825,
+  "readiness_score": 59.0304839849472,
   "assessments": {
     "infrastructure": {
-      "score": 27.139089012145995,
+      "score": 28.743871879577636,
       "max_score": 100,
       "details": {
         "system_resources": {
           "memory_gb": 3.8496856689453125,
           "cpu_cores": 2,
-          "disk_space_gb": 11.400043487548828
+          "disk_space_gb": 19.42395782470703
         },
         "python_version": "3.12.3",
         "gpu_available": false
       },
-      "summary": "Infrastructure score: 27.139089012145995/100 (RAM: 3.8GB, CPU: 2 cores)"
+      "summary": "Infrastructure score: 28.743871879577636/100 (RAM: 3.8GB, CPU: 2 cores)"
     },
     "scalability": {
       "score": 0,
       "max_score": 100,
       "details": {
         "stateless_operations": true,
-        "batch_processing_time": 0.002016305923461914,
+        "batch_processing_time": 0.001967191696166992,
         "memory_efficiency": true,
-        "memory_delta_mb": 1.5703125
+        "memory_delta_mb": 1.390625
       },
       "error": "'NoneType' object has no attribute 'get'",
       "summary": "Scalability assessment failed: 'NoneType' object has no attribute 'get'"
@@ -32,29 +32,29 @@
       "score": 100,
       "max_score": 100,
       "details": {
-        "data_loading_time": 0.3839067910000722,
-        "cell_typing_time": 0.0010088679998716543,
-        "interaction_time": 0.36118738699997266,
+        "data_loading_time": 0.3009918410000125,
+        "cell_typing_time": 0.0011072749999812004,
+        "interaction_time": 0.32511072899998794,
         "interactions_found": 49990,
-        "peak_memory_mb": 63.2578125,
-        "throughput_time": 0.02674063200015553,
-        "datasets_per_second": 186.98136977356853
+        "peak_memory_mb": 94.56640625,
+        "throughput_time": 0.024748264999999492,
+        "datasets_per_second": 202.0343648332561
       },
-      "summary": "Performance benchmarks: 100/100 (load: 0.38s, predict: 0.00s)"
+      "summary": "Performance benchmarks: 100/100 (load: 0.30s, predict: 0.00s)"
     },
     "security": {
-      "score": 75.0,
+      "score": 73.5,
       "max_score": 100,
       "details": {
         "sanitization_rate": 0.8,
         "safe_files_rate": 1.0,
-        "secure_coding_rate": 0.7,
+        "secure_coding_rate": 0.65,
         "security_issues": [
-          "run_quality_gates.py: eval(",
-          "run_quality_gates.py: exec(",
-          "run_quality_gates.py: __import__",
-          "run_quality_gates.py: subprocess.call",
-          "production_readiness_check.py: eval("
+          "production_readiness_check.py: eval(",
+          "production_readiness_check.py: exec(",
+          "production_readiness_check.py: __import__",
+          "production_readiness_check.py: subprocess.call",
+          "run_quality_gates.py: eval("
         ],
         "secrets_in_code": 4,
         "secret_issues": [
@@ -63,7 +63,7 @@
           "production_readiness_check.py: secret"
         ]
       },
-      "summary": "Security hardening: 75.0/100 (sanitization: 4/5)"
+      "summary": "Security hardening: 73.5/100 (sanitization: 4/5)"
     },
     "monitoring": {
       "score": 100,
@@ -72,8 +72,8 @@
         "performance_monitoring": true,
         "health_check_available": true,
         "current_health": {
-          "memory_usage_percent": 15.9,
-          "disk_usage_percent": 51.4,
+          "memory_usage_percent": 15.0,
+          "disk_usage_percent": 17.2,
           "healthy": true
         },
         "metrics_collection": true
@@ -133,5 +133,5 @@
     "Set up staging environment for testing"
   ],
   "deployment_ready": false,
-  "timestamp": 1755058759.061498
+  "timestamp": 1755561209.7264957
 }

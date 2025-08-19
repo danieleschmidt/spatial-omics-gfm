@@ -18,18 +18,59 @@ class ValidationError(Exception):
     pass
 
 
+class ValidationConfig:
+    """Configuration for data validation."""
+    def __init__(self):
+        self.strict_mode = False
+        self.min_genes_per_cell = 50
+        self.max_genes_per_cell = 10000
+        self.min_cells_per_gene = 3
+
+
 class DataValidator:
     """Comprehensive data validator for spatial transcriptomics."""
     
-    def __init__(self, strict_mode: bool = False):
+    def __init__(self, config: ValidationConfig = None):
         """
         Initialize validator.
         
         Args:
-            strict_mode: If True, raise errors for warnings. If False, issue warnings.
+            config: Validation configuration
         """
-        self.strict_mode = strict_mode
+        self.config = config or ValidationConfig()
         self.validation_results = {}
+    
+    def validate_spatial_data_simple(self, expression_data: np.ndarray, coordinates: np.ndarray) -> Tuple[bool, List[str]]:
+        """
+        Simple validation of spatial transcriptomics data.
+        
+        Args:
+            expression_data: Expression matrix (cells x genes)
+            coordinates: Coordinate matrix (cells x 2)
+            
+        Returns:
+            Tuple of (is_valid, error_messages)
+        """
+        errors = []
+        
+        # Check dimensions
+        if expression_data.shape[0] != coordinates.shape[0]:
+            errors.append(f"Number of cells mismatch: expression has {expression_data.shape[0]}, coordinates has {coordinates.shape[0]}")
+        
+        if coordinates.shape[1] != 2:
+            errors.append(f"Coordinates must be 2D, got shape {coordinates.shape}")
+        
+        # Check for invalid values
+        if np.any(np.isnan(expression_data)):
+            errors.append("Expression data contains NaN values")
+        
+        if np.any(np.isnan(coordinates)):
+            errors.append("Coordinates contain NaN values")
+        
+        if np.any(expression_data < 0):
+            errors.append("Expression data contains negative values")
+        
+        return len(errors) == 0, errors
     
     def validate_expression_matrix(
         self, 
