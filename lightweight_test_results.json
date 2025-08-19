@@ -1,0 +1,84 @@
+{
+  "total_tests": 8,
+  "passed": 8,
+  "failed": 0,
+  "success_rate": 100.0,
+  "total_execution_time": 0.4940619468688965,
+  "failed_tests": [],
+  "test_results": [
+    {
+      "name": "core_data_structures",
+      "passed": true,
+      "execution_time": 0.3758049011230469,
+      "error_message": null,
+      "metadata": {
+        "cells_tested": 100,
+        "genes_tested": 50
+      }
+    },
+    {
+      "name": "cell_type_prediction",
+      "passed": true,
+      "execution_time": 0.003257274627685547,
+      "error_message": null,
+      "metadata": {
+        "cell_types_tested": 5
+      }
+    },
+    {
+      "name": "interaction_prediction",
+      "passed": true,
+      "execution_time": 0.008250713348388672,
+      "error_message": null,
+      "metadata": {
+        "interactions_found": 340,
+        "has_interactions": true
+      }
+    },
+    {
+      "name": "configuration_system",
+      "passed": true,
+      "execution_time": 8.96453857421875e-05,
+      "error_message": null,
+      "metadata": {
+        "config_sections": 3
+      }
+    },
+    {
+      "name": "security_features",
+      "passed": true,
+      "execution_time": 0.0023870468139648438,
+      "error_message": null,
+      "metadata": {
+        "security_checks": 4
+      }
+    },
+    {
+      "name": "performance_monitoring",
+      "passed": true,
+      "execution_time": 0.0771951675415039,
+      "error_message": null,
+      "metadata": {
+        "memory_stats_keys": 5
+      }
+    },
+    {
+      "name": "data_validation",
+      "passed": true,
+      "execution_time": 0.0023899078369140625,
+      "error_message": null,
+      "metadata": {
+        "validation_checks": 2
+      }
+    },
+    {
+      "name": "globalization_features",
+      "passed": true,
+      "execution_time": 0.02468729019165039,
+      "error_message": null,
+      "metadata": {
+        "languages_tested": 2
+      }
+    }
+  ]
+}
