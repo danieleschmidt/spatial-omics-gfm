@@ -1,85 +1,43 @@
 {
-  "overall_status": "PASS_WITH_WARNINGS",
+  "overall_status": "FAIL",
   "gates": {
     "functionality": {
-      "passed": true,
-      "details": {
-        "imports": {
-          "status": "success"
-        },
-        "basic_analysis": {
-          "status": "success",
-          "cells_analyzed": 500,
-          "genes_analyzed": 100
-        },
-        "validation": {
-          "status": "success",
-          "overall_valid": true
-        }
-      },
-      "summary": "All core functionality tests passed"
+      "passed": false,
+      "details": {},
+      "error": "No module named 'numpy'",
+      "summary": "Functionality tests failed: No module named 'numpy'"
     },
     "robustness": {
-      "passed": true,
+      "passed": false,
       "details": {
-        "exit_code": 0,
-        "stdout": "\ud83d\udee1\ufe0f Spatial-Omics GFM Robustness Testing\n==================================================\n=== Testing Data Validation ===\n1. Testing expression matrix validation...\n   Valid: True\n   Warnings: 0\n   Metrics: cells=100, genes=50\n2. Testing coordinate validation...\n   Valid: True\n   Spatial extent: {'n_cells': 100, 'n_dimensions': 2, 'x_range': [22.0218552475796, 989.5631749324879], 'x_mean': 526.785698581469, 'x_std': 291.3853290012348, 'y_range': [9.72840613951631, 996.3628598094814], 'y_mean': 518.4185174289069, 'y_std': 299.5443892164318}\n3. Testing gene name validation...\n   Valid: True\n   Mitochondrial genes: 1\n4. Testing comprehensive validation...\n   Overall valid: True\n   Total warnings: 0\n   Total errors: 0\n\n=== Testing Input Validation ===\n1. Testing file path sanitization...\n   Safe path: /root/repo/README.md\n2. Testing parameter validation...\n   Validated parameters: {'n_neighbors': 6, 'learning_rate': 0.001, 'model_type': 'transformer', 'batch_size': 32}\n3. Testing memory requirements...\n   Sufficient memory: True\n   Estimated usage: 0.000 GB\n\n=== Testing Security Validation ===\n1. Testing file safety check...\n   File is safe: True\n   Detected type: TEXT\n   File size: 23966 bytes\n2. Testing input sanitization...\n   'normal input text...' -> 'normal input text...'\n   'input with <script>alert('xss'...' -> BLOCKED: Potentially dangerous pattern detected: [;&|`$(){}[\\]<>]\n   'input with $(rm -rf /)...' -> BLOCKED: Potentially dangerous pattern detected: [;&|`$(){}[\\]<>]\n   'SELECT * FROM users WHERE id =...' -> BLOCKED: Potentially dangerous pattern detected: [;&|`$(){}[\\]<>]\n   'normal gene name: ACTB...' -> 'normal gene name: ACTB...'\n3. Testing permission validation...\n   Has read permission: True\n   Permissions: {'readable': True, 'writable': True, 'executable': True, 'mode': '755', 'owner_uid': 0, 'group_gid': 0}\n\n=== Testing Error Handling ===\n1. Testing with invalid expression matrix...\n   Warnings for negative values: 4\n2. Testing with mismatched dimensions...\n   Dimension mismatch detected: True\n3. Testing with dangerous file path...\n   Dangerous path blocked: InputValidationError\n\n\u2705 All robustness tests completed successfully!\nGeneration 2 robustness features are working correctly.\n",
-        "stderr": ""
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/root/repo/test_robustness.py\", line 10, in <module>\n    import numpy as np\nModuleNotFoundError: No module named 'numpy'\n"
       },
-      "summary": "All robustness tests passed"
+      "summary": "Robustness tests failed with exit code 1"
     },
     "performance": {
-      "passed": true,
+      "passed": false,
       "details": {
-        "exit_code": 0,
-        "stdout": "\u26a1 Spatial-Omics GFM Performance Testing\n==================================================\n=== Testing Caching System ===\n1. Testing memory cache...\n   Retrieved data shape: (100, 100)\n   Memory cache stats: {'size': 5, 'max_size': 10, 'memory_usage_mb': 0.382080078125, 'max_memory_mb': 50.0, 'total_accesses': 6, 'hit_ratio': 0.0}\n2. Testing disk cache...\n   Retrieved from disk: <class 'dict'>\n   Disk cache stats: {'size': 1, 'total_size_gb': 1.7799437046051025e-05, 'max_size_gb': 1.0, 'total_accesses': 2, 'cache_dir': '/tmp/test_cache'}\n3. Testing unified cache manager...\n   First call time: 0.1018s\n   Second call time: 0.0001s\n   Speedup: 918.48x\n   Results identical: True\n\n=== Testing Profiling ===\n1. Testing profiler context...\n   Execution time: 0.0076s\n   Memory delta: 1.12MB\n   Top functions profiled:\n              30 function calls in 0.007 seconds\n        Ordered by: cumulative time\n        List reduced from 21 to 10 due to restriction <10>\n        ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n             1    0.001    0.001    0.007    0.007 /root/repo/test_performance.py:90(matrix_operations)\n             1    0.006    0.006    0.006    0.006 /usr/lib/python3/dist-packages/numpy/linalg/linalg.py:1499(svd)\n             2    0.000    0.000    0.000    0.000 {method 'rand' of 'numpy.random.mtrand.RandomState' objects}\n             1    0.000    0.000    0.000    0.000 /root/repo/spatial_omics_gfm/performance/optimization.py:57(__exit__)\n             1    0.000    0.000    0.000    0.000 {method 'disable' of '_lsprof.Profiler' objects}\n             1    0.000    0.000    0.000    0.000 /usr/lib/python3/dist-packages/numpy/linalg/linalg.py:159(_commonType)\n             3    0.000    0.000    0.000    0.000 {method 'astype' of 'numpy.ndarray' objects}\n             1    0.000    0.000    0.000    0.000 <string>:1(<lambda>)\n             2    0.000    0.000    0.000    0.000 /usr/lib/python3/dist-packages/numpy/linalg/linalg.py:153(_realType)\n\n=== Testing Batch Processing ===\n1. Testing array batch processing...\n   Input shape: (5000, 100)\n   Output shape: (5000, 1)\n   Processing time: 0.0019s\n   Memory delta: 0.00MB\n2. Testing list batch processing...\n   Processed 1000 items\n\n=== Testing Automatic Optimization ===\n1. Testing performance optimizer...\n   Optimizing for shape (1000, 50)...\n     Best batch size: 1000\n     Best time: 0.0004s\n     Speedup factor: 3.73x\n   Optimizing for shape (2000, 100)...\n     Best batch size: 1000\n     Best time: 0.0009s\n     Speedup factor: 3.58x\n2. Testing optimization decorator...\n   Computed norms for 1000 rows\n   Execution time: 0.0005s\n\n=== Testing Memory Management ===\n1. Testing memory monitoring...\n   Result: 2500445.42\n   Peak memory: 72.61MB\n   Memory delta: 0.01MB\n2. Testing batch processor memory limits...\n   Successfully processed with memory limits\n   Output shape: (4000, 1)\n   Processing time: 0.1410s\n\n=== Testing Integrated Performance ===\n1. Creating integrated performance pipeline...\n2. Running spatial analysis pipeline...\n   First run time: 0.1822s\n   Second run time: 0.0031s\n   Cache speedup: 57.91x\n   Spatial stats: {'mean_distance': 519.7849630747634, 'neighbor_connectivity': 6, 'expression_variance': 7.127918269299885e-06}\n   Cache stats: {'memory': {'size': 1, 'max_size': 20, 'memory_usage_mb': 0.00017547607421875, 'max_memory_mb': 100.0, 'total_accesses': 2, 'hit_ratio': 0.0}, 'disk': {'size': 1, 'total_size_gb': 0.0019201720133423805, 'max_size_gb': 1.0, 'total_accesses': 1, 'cache_dir': '/tmp/integrated_cache'}}\n\n\u2705 All performance tests completed successfully!\nGeneration 3 performance features are working correctly.\n",
-        "stderr": "Memory usage (74.7 MB) exceeds limit (50 MB)\nMemory usage (74.7 MB) exceeds limit (50 MB)\nMemory usage (74.7 MB) exceeds limit (50 MB)\nMemory usage (74.7 MB) exceeds limit (50 MB)\n",
-        "cache_speedup": "Cache speedup: 57.91x"
+        "exit_code": 1,
+        "stdout": "",
+        "stderr": "Traceback (most recent call last):\n  File \"/root/repo/test_performance.py\", line 11, in <module>\n    import numpy as np\nModuleNotFoundError: No module named 'numpy'\n"
       },
-      "summary": "All performance tests passed"
+      "summary": "Performance tests failed with exit code 1"
     },
     "security": {
-      "passed": true,
-      "details": {
-        "file_safety": {
-          "readme_safe": true,
-          "detected_type": "TEXT"
-        },
-        "input_sanitization": [
-          {
-            "input": "normal input",
-            "status": "sanitized"
-          },
-          {
-            "input": "<script>alert('xss')",
-            "status": "blocked"
-          },
-          {
-            "input": "$(rm -rf /)",
-            "status": "blocked"
-          }
-        ],
-        "code_security": {
-          "files_checked": 20,
-          "issues_found": 14,
-          "issues": [
-            "production_readiness_check.py: eval(",
-            "production_readiness_check.py: exec(",
-            "production_readiness_check.py: __import__",
-            "production_readiness_check.py: subprocess.call",
-            "run_quality_gates.py: eval("
-          ]
-        }
-      },
-      "summary": "Security validation passed (14 code patterns found)"
+      "passed": false,
+      "details": {},
+      "error": "No module named 'numpy'",
+      "summary": "Security tests failed: No module named 'numpy'"
     },
     "code_quality": {
       "passed": true,
       "details": {
         "code_metrics": {
-          "python_files": 121,
-          "total_lines": 68492,
-          "avg_lines_per_file": 566.0495867768595
+          "python_files": 130,
+          "total_lines": 70038,
+          "avg_lines_per_file": 538.7538461538461
         },
         "documentation": {
           "modules_checked": 10,
@@ -96,14 +54,9 @@
     },
     "integration": {
       "passed": false,
-      "details": {
-        "data_integration": {
-          "data_created": true,
-          "validation_passed": true
-        }
-      },
-      "error": "'NoneType' object has no attribute 'get'",
-      "summary": "Integration tests failed: 'NoneType' object has no attribute 'get'"
+      "details": {},
+      "error": "No module named 'numpy'",
+      "summary": "Integration tests failed: No module named 'numpy'"
     },
     "documentation": {
       "passed": true,
@@ -150,20 +103,20 @@
   },
   "summary": {
     "total_gates": 7,
-    "passed_gates": 6,
-    "failed_gates": 1,
-    "pass_rate": 85.71428571428571,
+    "passed_gates": 2,
+    "failed_gates": 5,
+    "pass_rate": 28.57142857142857,
     "passed_gate_names": [
-      "functionality",
-      "robustness",
-      "performance",
-      "security",
       "code_quality",
       "documentation"
     ],
     "failed_gate_names": [
+      "functionality",
+      "robustness",
+      "performance",
+      "security",
       "integration"
     ]
   },
-  "timestamp": 1755561201.717448
+  "timestamp": 1755649813.9913995
 }
