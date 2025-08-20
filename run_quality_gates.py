@@ -382,8 +382,8 @@ class QualityGateRunner:
             neighbors = data.find_spatial_neighbors(k=5)
             
             result["details"]["workflow_integration"] = {
-                "stats_computed": len(stats) > 0,
-                "neighbors_found": len(neighbors) > 0
+                "stats_computed": stats is not None and len(stats) > 0,
+                "neighbors_found": neighbors is not None and len(neighbors) > 0
             }
             
             result["passed"] = True
