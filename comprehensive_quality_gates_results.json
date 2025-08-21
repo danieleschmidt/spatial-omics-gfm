@@ -1,0 +1,569 @@
+{
+  "execution_summary": {
+    "start_time": "2025-08-21 03:49:48.525544",
+    "end_time": "2025-08-21 03:50:20.597143",
+    "duration_seconds": 32.071599,
+    "tests_executed": 5,
+    "tests_passed": 5,
+    "tests_failed": 0,
+    "overall_status": "not_run"
+  },
+  "unit_tests": [
+    {
+      "name": "Basic Functionality",
+      "category": "unit",
+      "status": "passed",
+      "execution_time": 1.9073486328125e-06,
+      "error_message": null,
+      "result_data": {
+        "result": "basic math works"
+      }
+    },
+    {
+      "name": "Array Operations",
+      "category": "unit",
+      "status": "passed",
+      "execution_time": 0.0001952648162841797,
+      "error_message": null,
+      "result_data": {
+        "mean": 3.0,
+        "sum": "15"
+      }
+    },
+    {
+      "name": "String Operations",
+      "category": "unit",
+      "status": "passed",
+      "execution_time": 3.337860107421875e-06,
+      "error_message": null,
+      "result_data": {
+        "length": 17,
+        "contains_gfm": true
+      }
+    }
+  ],
+  "integration_tests": [
+    {
+      "name": "Data Pipeline",
+      "category": "integration",
+      "status": "passed",
+      "execution_time": 0.0003821849822998047,
+      "error_message": null,
+      "result_data": {
+        "input_shape": [
+          100,
+          50
+        ],
+        "output_mean": 0.9976139428444907
+      }
+    },
+    {
+      "name": "Model Integration",
+      "category": "integration",
+      "status": "passed",
+      "execution_time": 7.915496826171875e-05,
+      "error_message": null,
+      "result_data": {
+        "predictions": 10,
+        "feature_shape": [
+          10,
+          5
+        ]
+      }
+    }
+  ],
+  "performance_tests": [
+    {
+      "function": "_sample_computation_heavy",
+      "iterations": 50,
+      "mean_time_ms": 2.186269119995359,
+      "median_time_ms": 2.18501799997739,
+      "std_time_ms": 0.1490361927426279,
+      "min_time_ms": 1.9494190000841627,
+      "max_time_ms": 2.809061999982987,
+      "p95_time_ms": 2.4080287500112263,
+      "p99_time_ms": 2.6819604099898693,
+      "mean_memory_mb": 0.0146875,
+      "max_memory_mb": 0.7265625,
+      "throughput_per_second": 457.40023076487626,
+      "status": "passed",
+      "test_name": "Computation Heavy Test"
+    },
+    {
+      "function": "_sample_memory_intensive",
+      "iterations": 50,
+      "mean_time_ms": 34.47028742000384,
+      "median_time_ms": 33.61023849998901,
+      "std_time_ms": 2.507065051794055,
+      "min_time_ms": 31.76528500000586,
+      "max_time_ms": 44.33659999995143,
+      "p95_time_ms": 39.73131429998489,
+      "p99_time_ms": 42.80163432999529,
+      "mean_memory_mb": 0.02140625,
+      "max_memory_mb": 1.0703125,
+      "throughput_per_second": 29.010492074390964,
+      "status": "passed",
+      "test_name": "Memory Intensive Test"
+    },
+    {
+      "function": "_sample_io_simulation",
+      "iterations": 50,
+      "mean_time_ms": 0.25622001998954147,
+      "median_time_ms": 0.19935599999598708,
+      "std_time_ms": 0.15182168043883928,
+      "min_time_ms": 0.16530900006728189,
+      "max_time_ms": 1.1808430000428416,
+      "p95_time_ms": 0.41059660001110376,
+      "p99_time_ms": 0.8202534700296823,
+      "mean_memory_mb": 0.0,
+      "max_memory_mb": 0.0,
+      "throughput_per_second": 3902.8956443014035,
+      "status": "passed",
+      "test_name": "I/O Simulation Test"
+    }
+  ],
+  "security_scan": {
+    "timestamp": "2025-08-21T03:49:50.468060",
+    "scanned_files": 20,
+    "total_vulnerabilities": 50,
+    "severity_breakdown": {
+      "low": 19,
+      "medium": 2,
+      "high": 29,
+      "critical": 0
+    },
+    "vulnerabilities": [
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 569,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "- `eval()` and `exec()` usage in production_readiness_check.py"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 569,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "- `eval()` and `exec()` usage in production_readiness_check.py"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 574,
+        "severity": "low",
+        "description": "Potential hardcoded password or credential",
+        "pattern": "password",
+        "code_snippet": "- Hardcoded references to \"password\", \"api_key\", \"secret\" in test files"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 574,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "- Hardcoded references to \"password\", \"api_key\", \"secret\" in test files"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 581,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "eval(user_input)  # Never do this"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 582,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "exec(code_string)  # Security risk"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 586,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "ast.literal_eval(safe_string)  # For literals only"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 629,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "- [ ] Remove eval() and exec() usage"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 629,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "- [ ] Remove eval() and exec() usage"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 631,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "- [ ] Use environment variables for secrets"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 656,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "blocked_patterns: [\"../\", \"eval(\", \"exec(\", \"__import__\"]"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 656,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "blocked_patterns: [\"../\", \"eval(\", \"exec(\", \"__import__\"]"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 700,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "\"Remove eval() and exec() usage from code\","
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 700,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "\"Remove eval() and exec() usage from code\","
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 701,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "\"Implement proper secret management\","
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 990,
+        "severity": "low",
+        "description": "Potential hardcoded password or credential",
+        "pattern": "password",
+        "code_snippet": "DATABASE_URL=postgresql://user:password@localhost:5432/spatial_gfm"
+      },
+      {
+        "file": "enhanced_quality_gates.py",
+        "line": 1003,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "SECRET_KEY=change_this_in_production"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 373,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "dangerous_patterns = [\"eval(\", \"exec(\", \"__import__\", \"subprocess.call\"]"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 373,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "dangerous_patterns = [\"eval(\", \"exec(\", \"__import__\", \"subprocess.call\"]"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 396,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "secrets_found = []"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 397,
+        "severity": "low",
+        "description": "Potential hardcoded password or credential",
+        "pattern": "password",
+        "code_snippet": "secret_patterns = [\"password\", \"api_key\", \"secret\", \"token\"]"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 397,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "secret_patterns = [\"password\", \"api_key\", \"secret\", \"token\"]"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 404,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "for pattern in secret_patterns:"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 406,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "secrets_found.append(f\"{file_path.name}: {pattern}\")"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 410,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "secrets_score = 20 if len(secrets_found) == 0 else 10"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 411,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "result[\"details\"][\"secrets_in_code\"] = len(secrets_found)"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 412,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "result[\"details\"][\"secret_issues\"] = secrets_found[:3]"
+      },
+      {
+        "file": "production_readiness_check.py",
+        "line": 414,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "total_security_score = sanitization_score + file_safety_score + secure_coding_score + secrets_score"
+      },
+      {
+        "file": "run_quality_gates.py",
+        "line": 228,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "dangerous_patterns = [\"eval(\", \"exec(\", \"__import__\", \"subprocess.call\"]"
+      },
+      {
+        "file": "run_quality_gates.py",
+        "line": 228,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "dangerous_patterns = [\"eval(\", \"exec(\", \"__import__\", \"subprocess.call\"]"
+      },
+      {
+        "file": "robustness_enhancement.py",
+        "line": 253,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "dangerous_strings = ['<script', 'javascript:', 'eval(', 'exec(']"
+      },
+      {
+        "file": "robustness_enhancement.py",
+        "line": 253,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "dangerous_strings = ['<script', 'javascript:', 'eval(', 'exec(']"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 260,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "'pattern': 'eval(',"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 262,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "'description': 'Use of eval() function can lead to code injection'"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 265,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "'pattern': 'exec(',"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 267,
+        "severity": "high",
+        "description": "Use of exec() function can lead to code injection",
+        "pattern": "exec(",
+        "code_snippet": "'description': 'Use of exec() function can lead to code injection'"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 270,
+        "severity": "medium",
+        "description": "Dynamic imports can be security risks",
+        "pattern": "__import__(",
+        "code_snippet": "'pattern': '__import__(',"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 275,
+        "severity": "high",
+        "description": "Shell=True in subprocess calls can lead to command injection",
+        "pattern": "shell=True",
+        "code_snippet": "'pattern': 'shell=True',"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 277,
+        "severity": "high",
+        "description": "Shell=True in subprocess calls can lead to command injection",
+        "pattern": "shell=True",
+        "code_snippet": "'description': 'Shell=True in subprocess calls can lead to command injection'"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 280,
+        "severity": "low",
+        "description": "Potential hardcoded password or credential",
+        "pattern": "password",
+        "code_snippet": "'pattern': 'password',"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 282,
+        "severity": "low",
+        "description": "Potential hardcoded password or credential",
+        "pattern": "password",
+        "code_snippet": "'description': 'Potential hardcoded password or credential'"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 285,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "'pattern': 'secret',"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 287,
+        "severity": "low",
+        "description": "Potential hardcoded secret",
+        "pattern": "secret",
+        "code_snippet": "'description': 'Potential hardcoded secret'"
+      },
+      {
+        "file": "quality_gates_comprehensive.py",
+        "line": 290,
+        "severity": "medium",
+        "description": "Pickle deserialization can execute arbitrary code",
+        "pattern": "pickle.loads",
+        "code_snippet": "'pattern': 'pickle.loads',"
+      },
+      {
+        "file": "examples/basic_usage_example.py",
+        "line": 194,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "model.eval()"
+      },
+      {
+        "file": "examples/research_demonstration.py",
+        "line": 151,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "model.eval()"
+      },
+      {
+        "file": "examples/simple_training_example.py",
+        "line": 194,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "model.eval()"
+      },
+      {
+        "file": "examples/simple_training_example.py",
+        "line": 195,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "classifier.eval()"
+      },
+      {
+        "file": "examples/simple_training_example.py",
+        "line": 228,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "model.eval()"
+      },
+      {
+        "file": "examples/simple_training_example.py",
+        "line": 229,
+        "severity": "high",
+        "description": "Use of eval() function can lead to code injection",
+        "pattern": "eval(",
+        "code_snippet": "classifier.eval()"
+      }
+    ],
+    "status": "failed"
+  },
+  "load_tests": {
+    "duration_seconds": 30.127355098724365,
+    "concurrent_users": 5,
+    "total_requests": 1000,
+    "total_errors": 0,
+    "error_rate_percent": 0.0,
+    "requests_per_second": 33.19242584432317,
+    "mean_response_time_ms": 50.3723247051239,
+    "p95_response_time_ms": 50.632357597351074,
+    "p99_response_time_ms": 50.7320237159729,
+    "max_response_time_ms": 50.86374282836914,
+    "status": "passed"
+  },
+  "overall_assessment": {
+    "overall_status": "failed",
+    "gate_results": {
+      "unit_tests": "passed",
+      "integration_tests": "passed",
+      "performance_tests": "passed",
+      "security_scan": "failed",
+      "load_tests": "passed"
+    },
+    "issues": [
+      "Security scan found 50 vulnerabilities"
+    ],
+    "recommendations": [
+      "Address identified issues before production deployment"
+    ],
+    "production_readiness": false
+  }
+}
