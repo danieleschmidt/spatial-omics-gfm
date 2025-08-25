@@ -1,0 +1,108 @@
+{
+  "generation": "3_optimized",
+  "analysis_metadata": {
+    "n_cells": 1000,
+    "n_genes": 200,
+    "total_analysis_time": 6.761212348937988,
+    "features_analyzed": [
+      "performance_optimization",
+      "in_memory_caching",
+      "parallel_processing",
+      "memory_management",
+      "auto_scaling",
+      "performance_monitoring"
+    ]
+  },
+  "performance_metrics": {
+    "total_execution_time": 6.761212348937988,
+    "normalization_time": 0.08819580078125,
+    "neighbor_computation_time": 1.502223014831543,
+    "cached_neighbor_time": 0.00013637542724609375,
+    "cache_speedup_factor": 11015.34965034965,
+    "cell_type_prediction_time": 0.016532182693481445,
+    "interaction_prediction_time": 0.9269790649414062,
+    "memory_optimization": {
+      "initial_memory_mb": 18.761,
+      "final_memory_mb": 18.648,
+      "memory_saved_mb": 0.11299999999999955,
+      "optimizations_applied": []
+    },
+    "benchmark_results": {
+      "neighbor_finding": {
+        "avg_time": 1.852216124534607,
+        "min_time": 1.7605576515197754,
+        "max_time": 1.9438745975494385
+      },
+      "cache_operations": {
+        "avg_time": 6.747245788574219e-06,
+        "operations_per_second": 148208.6219081272
+      }
+    }
+  },
+  "system_performance": {
+    "memory_usage": {
+      "current": 18.648,
+      "peak": 19.761,
+      "average": 18.742
+    },
+    "cache_performance": {
+      "size": 24,
+      "max_size": 2000,
+      "hit_count": 21,
+      "miss_count": 1,
+      "hit_rate": 0.9545454545454546,
+      "utilization": 0.012
+    },
+    "operation_metrics": {
+      "initialization": {
+        "execution_time": 6.282980918884277,
+        "memory_usage_mb": 0.0,
+        "cpu_utilization": 0.0
+      },
+      "neighbors_k6": {
+        "execution_time": 1.7589154243469238,
+        "memory_usage_mb": 19.761,
+        "cpu_utilization": 0.0
+      },
+      "normalization_log1p_cpm": {
+        "execution_time": 0.08696579933166504,
+        "memory_usage_mb": 17.761,
+        "cpu_utilization": 0.0
+      },
+      "neighbors_k10": {
+        "execution_time": 1.5010943412780762,
+        "memory_usage_mb": 18.76,
+        "cpu_utilization": 0.0
+      }
+    },
+    "parallelization": {
+      "max_workers": 4,
+      "use_processes": false
+    }
+  },
+  "analysis_results": {
+    "cell_types": {
+      "total_assignments": 1000,
+      "unique_types": 6,
+      "success": true
+    },
+    "interactions": {
+      "total_interactions": 65299,
+      "pathways_analyzed": 4,
+      "success": true
+    },
+    "neighbors": {
+      "cells_with_neighbors": 1000,
+      "avg_neighbors_per_cell": 9.953,
+      "success": true
+    }
+  },
+  "optimization_features": {
+    "caching_enabled": true,
+    "cache_hit_rate": 0.9545454545454546,
+    "parallel_processing": true,
+    "max_workers": 4,
+    "memory_monitoring": true,
+    "normalization_success": true
+  }
+}

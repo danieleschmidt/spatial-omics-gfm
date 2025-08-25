@@ -1,0 +1,15 @@
+{
+  "validation_results": {
+    "expression_matrix": "ValidationResult(is_valid=True, errors=[], warnings=[], metadata={'n_cells': 500, 'n_genes': 120, 'negative_values': 0, 'inf_values': 0, 'nan_values': 0, 'validation_level': 'strict'}, validation_time=0.0033979415893554688)",
+    "coordinates": "ValidationResult(is_valid=True, errors=[], warnings=[], metadata={'spatial_dim': 2, 'x_range': 783.2988950178396, 'y_range': 789.9490097042783, 'duplicate_coordinates': 0}, validation_time=0.0016646385192871094)",
+    "gene_names": "ValidationResult(is_valid=True, errors=[], warnings=[], metadata={'unique_names': 120, 'duplicate_names': 0}, validation_time=3.8623809814453125e-05)"
+  },
+  "security_results": {
+    "initialization": "SecurityCheckResult(is_secure=True, threats_detected=[], recommendations=[], risk_level='low')"
+  },
+  "data_properties": {
+    "n_cells": 500,
+    "n_genes": 120,
+    "has_gene_names": true
+  }
+}
