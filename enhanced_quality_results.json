@@ -1,5 +1,5 @@
 {
-  "timestamp": 1755649808.4088016,
+  "timestamp": 1756097965.4428365,
   "total_gates": 6,
   "passed_gates": 5,
   "average_score": 87.5,
@@ -8,7 +8,7 @@
       "gate_name": "integration_enhancement",
       "passed": true,
       "score": 75,
-      "execution_time": 0.06244039535522461,
+      "execution_time": 0.07077336311340332,
       "details": {
         "fix_script_output": "Integration test failed: No module named 'numpy'\n",
         "fix_script_stderr": "",
@@ -22,7 +22,7 @@
       "gate_name": "disaster_recovery",
       "passed": true,
       "score": 100,
-      "execution_time": 0.0005340576171875,
+      "execution_time": 0.0009453296661376953,
       "details": {
         "backup_script_created": true,
         "restore_script_created": true,
@@ -38,7 +38,7 @@
       "gate_name": "infrastructure_optimization",
       "passed": false,
       "score": 50,
-      "execution_time": 0.0002868175506591797,
+      "execution_time": 0.0003578662872314453,
       "details": {
         "error": "No module named 'psutil'"
       },
@@ -50,7 +50,7 @@
       "gate_name": "security_hardening",
       "passed": true,
       "score": 100,
-      "execution_time": 0.00027680397033691406,
+      "execution_time": 0.0005044937133789062,
       "details": {
         "security_guide_created": true,
         "secure_config_created": true
@@ -65,7 +65,7 @@
       "gate_name": "documentation_completion",
       "passed": true,
       "score": 100,
-      "execution_time": 0.00022149085998535156,
+      "execution_time": 0.0005633831024169922,
       "details": {
         "api_docs_created": true,
         "troubleshooting_created": true
@@ -80,9 +80,9 @@
       "gate_name": "deployment_automation",
       "passed": true,
       "score": 100,
-      "execution_time": 0.00030994415283203125,
+      "execution_time": 0.00029850006103515625,
       "details": {
-        "ci_cd_created": true,
+        "ci_cd_guide_exists": true,
         "env_config_created": true
       },
       "recommendations": [
