@@ -1,97 +1,57 @@
 {
   "overall_status": "NOT_READY",
-  "readiness_score": 59.0304839849472,
+  "readiness_score": 31.874999999999996,
   "assessments": {
     "infrastructure": {
-      "score": 28.743871879577636,
+      "score": 0,
       "max_score": 100,
-      "details": {
-        "system_resources": {
-          "memory_gb": 3.8496856689453125,
-          "cpu_cores": 2,
-          "disk_space_gb": 19.42395782470703
-        },
-        "python_version": "3.12.3",
-        "gpu_available": false
-      },
-      "summary": "Infrastructure score: 28.743871879577636/100 (RAM: 3.8GB, CPU: 2 cores)"
+      "details": {},
+      "error": "No module named 'psutil'",
+      "summary": "Infrastructure assessment failed: No module named 'psutil'"
     },
     "scalability": {
       "score": 0,
       "max_score": 100,
-      "details": {
-        "stateless_operations": true,
-        "batch_processing_time": 0.001967191696166992,
-        "memory_efficiency": true,
-        "memory_delta_mb": 1.390625
-      },
-      "error": "'NoneType' object has no attribute 'get'",
-      "summary": "Scalability assessment failed: 'NoneType' object has no attribute 'get'"
+      "details": {},
+      "error": "No module named 'numpy'",
+      "summary": "Scalability assessment failed: No module named 'numpy'"
     },
     "performance": {
-      "score": 100,
+      "score": 0,
       "max_score": 100,
-      "details": {
-        "data_loading_time": 0.3009918410000125,
-        "cell_typing_time": 0.0011072749999812004,
-        "interaction_time": 0.32511072899998794,
-        "interactions_found": 49990,
-        "peak_memory_mb": 94.56640625,
-        "throughput_time": 0.024748264999999492,
-        "datasets_per_second": 202.0343648332561
-      },
-      "summary": "Performance benchmarks: 100/100 (load: 0.30s, predict: 0.00s)"
+      "details": {},
+      "error": "No module named 'numpy'",
+      "summary": "Performance benchmark failed: No module named 'numpy'"
     },
     "security": {
-      "score": 73.5,
+      "score": 0,
       "max_score": 100,
-      "details": {
-        "sanitization_rate": 0.8,
-        "safe_files_rate": 1.0,
-        "secure_coding_rate": 0.65,
-        "security_issues": [
-          "production_readiness_check.py: eval(",
-          "production_readiness_check.py: exec(",
-          "production_readiness_check.py: __import__",
-          "production_readiness_check.py: subprocess.call",
-          "run_quality_gates.py: eval("
-        ],
-        "secrets_in_code": 4,
-        "secret_issues": [
-          "production_readiness_check.py: password",
-          "production_readiness_check.py: api_key",
-          "production_readiness_check.py: secret"
-        ]
-      },
-      "summary": "Security hardening: 73.5/100 (sanitization: 4/5)"
+      "details": {},
+      "error": "No module named 'numpy'",
+      "summary": "Security assessment failed: No module named 'numpy'"
     },
     "monitoring": {
-      "score": 100,
+      "score": 50,
       "max_score": 100,
       "details": {
-        "performance_monitoring": true,
-        "health_check_available": true,
-        "current_health": {
-          "memory_usage_percent": 15.0,
-          "disk_usage_percent": 17.2,
-          "healthy": true
-        },
+        "performance_monitoring": false,
+        "health_check_available": false,
         "metrics_collection": true
       },
-      "summary": "Monitoring ready: 100/100 (logging: \u2713, health: \u2713, metrics: \u2713)"
+      "summary": "Monitoring ready: 50/100 (logging: \u2713, health: \u2713, metrics: \u2713)"
     },
     "deployment": {
-      "score": 70,
+      "score": 80,
       "max_score": 100,
       "details": {
         "docker_files": true,
         "kubernetes_files": true,
         "ci_cd_files": false,
         "config_management": true,
-        "environment_config": false,
+        "environment_config": true,
         "deployment_docs": true
       },
-      "summary": "Deployment automation: 70/100 (Docker: True, K8s: True)"
+      "summary": "Deployment automation: 80/100 (Docker: True, K8s: True)"
     },
     "disaster_recovery": {
       "score": 25,
@@ -105,33 +65,35 @@
       "summary": "Disaster recovery: 25/100 (backup: False, restore: False)"
     },
     "documentation": {
-      "score": 75,
+      "score": 100,
       "max_score": 100,
       "details": {
         "documentation_files": [
           "README.md",
           "DEPLOYMENT_GUIDE.md",
+          "API.md",
           "CONTRIBUTING.md",
-          "LICENSE"
+          "LICENSE",
+          "TROUBLESHOOTING.md"
         ],
-        "doc_coverage_percent": 57.14285714285714,
+        "doc_coverage_percent": 85.71428571428571,
         "api_documentation": false,
         "example_count": 8
       },
-      "summary": "Documentation: 75/100 (4/7 docs, 8 examples)"
+      "summary": "Documentation: 100/100 (6/7 docs, 8 examples)"
     }
   },
   "recommendations": [
     "Consider upgrading system resources (RAM, CPU, storage)",
     "Implement better caching and batch processing optimization",
+    "Optimize algorithms and consider GPU acceleration",
     "Enhance input validation and security practices",
-    "Add containerization and CI/CD automation",
+    "Implement comprehensive monitoring and alerting",
     "Implement backup and disaster recovery procedures",
-    "Complete documentation and API references",
     "Run full test suite including load testing",
     "Conduct security audit and penetration testing",
     "Set up staging environment for testing"
   ],
   "deployment_ready": false,
-  "timestamp": 1755561209.7264957
+  "timestamp": 1756092851.0685894
 }
