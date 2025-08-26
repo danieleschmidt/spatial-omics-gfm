@@ -1,0 +1,4514 @@
+{
+  "infrastructure_demo_summary": {
+    "total_execution_time": 0.02259373664855957,
+    "breakthrough_score": 40.0,
+    "scalability_efficiency": 3.2073682285340896,
+    "research_impact_achieved": false
+  },
+  "optimization_demonstration": {
+    "circuit_optimization": {
+      "original_gates": [
+        {
+          "qubit": 0,
+          "type": "hadamard"
+        },
+        {
+          "qubit": 0,
+          "type": "hadamard"
+        },
+        {
+          "control": 0,
+          "target": 1,
+          "type": "cnot"
+        },
+        {
+          "qubit": 2,
+          "type": "hadamard"
+        },
+        {
+          "qubit": 3,
+          "type": "hadamard"
+        },
+        {
+          "control": 2,
+          "target": 3,
+          "type": "cnot"
+        },
+        {
+          "qubit": 1,
+          "type": "hadamard"
+        }
+      ],
+      "optimized_gates": [
+        {
+          "control": 0,
+          "target": 1,
+          "type": "cnot"
+        },
+        {
+          "qubit": 2,
+          "type": "hadamard"
+        },
+        {
+          "qubit": 3,
+          "type": "hadamard"
+        },
+        {
+          "control": 2,
+          "target": 3,
+          "type": "cnot"
+        },
+        {
+          "qubit": 1,
+          "type": "hadamard"
+        }
+      ],
+      "original_depth": 4,
+      "optimized_depth": 2,
+      "speedup": 2.0,
+      "optimization_time": 6.842613220214844e-05,
+      "optimizations_applied": [
+        "redundant_gate_removal",
+        "gate_fusion",
+        "qubit_routing_optimization"
+      ]
+    },
+    "performance_metrics": {
+      "total_execution_time": 0.00040793418884277344,
+      "optimization_speedup": 2.0,
+      "cache_hit": false,
+      "parallel_execution": true,
+      "workers_used": 2
+    }
+  },
+  "cache_effectiveness_demo": {
+    "cache_demo_results": [
+      {
+        "run": 1,
+        "execution_time": 7.414817810058594e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 2,
+        "execution_time": 6.532669067382812e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 3,
+        "execution_time": 5.793571472167969e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 4,
+        "execution_time": 4.410743713378906e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 5,
+        "execution_time": 4.1961669921875e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 6,
+        "execution_time": 4.1961669921875e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 7,
+        "execution_time": 4.124641418457031e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 8,
+        "execution_time": 3.981590270996094e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 9,
+        "execution_time": 4.00543212890625e-05,
+        "cache_hit": false
+      },
+      {
+        "run": 10,
+        "execution_time": 3.933906555175781e-05,
+        "cache_hit": false
+      }
+    ],
+    "final_cache_stats": {
+      "hits": 20,
+      "misses": 2,
+      "hit_rate": 0.9090909090909091,
+      "size": 2,
+      "max_size": 500,
+      "evictions": 0
+    }
+  },
+  "scalability_analysis": {
+    "scalability_results": [
+      {
+        "circuit_complexity": 10,
+        "parallel_time": 0.0013134479522705078,
+        "sequential_time": 0.00014352798461914062,
+        "parallel_speedup": 0.10927573062261753,
+        "workers_used": 2
+      },
+      {
+        "circuit_complexity": 20,
+        "parallel_time": 0.0006043910980224609,
+        "sequential_time": 0.0002567768096923828,
+        "parallel_speedup": 0.42485207100591715,
+        "workers_used": 2
+      },
+      {
+        "circuit_complexity": 30,
+        "parallel_time": 0.0006473064422607422,
+        "sequential_time": 0.00023865699768066406,
+        "parallel_speedup": 0.36869244935543277,
+        "workers_used": 3
+      }
+    ],
+    "theoretical_max_speedup": 9.382773109243697,
+    "actual_average_speedup": 0.30094008366132247,
+    "scalability_efficiency": 3.2073682285340896
+  },
+  "streaming_processing_demo": {
+    "processing_summary": {
+      "total_batches_processed": 3,
+      "total_circuits_processed": 30,
+      "total_processing_time": 0.0177001953125,
+      "average_batch_time": 0.005900065104166667,
+      "throughput_circuits_per_sec": 1694.896551724138
+    },
+    "batch_results": [
+      {
+        "batch_id": 1,
+        "circuits_processed": 10,
+        "results": [
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 3,
+              "optimized_depth": 1,
+              "speedup": 3.0,
+              "optimization_time": 3.361701965332031e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                2.8345830255764063e-17,
+                0.47094567020350847,
+                0.5290543297964916
+              ],
+              "quantum_state_size": 32,
+              "gates_applied": 3,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00022101402282714844,
+              "optimization_speedup": 3.0,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 3
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 14,
+                "hit_rate": 0.6216216216216216,
+                "size": 14,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 10,
+                "completed_tasks": 6,
+                "total_tasks": 16,
+                "utilization": 1.6666666666666667,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 3
+                },
+                {
+                  "control": 2,
+                  "target": 3,
+                  "type": "cnot"
+                },
+                {
+                  "control": 4,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 1
+                },
+                {
+                  "qubit": 5,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 5,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 5,
+                  "original_target": 0
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 3
+                },
+                {
+                  "control": 2,
+                  "target": 3,
+                  "type": "cnot"
+                },
+                {
+                  "control": 4,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 1
+                },
+                {
+                  "qubit": 5,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 5,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 5,
+                  "original_target": 0
+                }
+              ],
+              "original_depth": 3,
+              "optimized_depth": 3,
+              "speedup": 1.0,
+              "optimization_time": 3.409385681152344e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.19535969338710996,
+                0.10466528521563909,
+                0.10466528521563906,
+                0.10466528521563906,
+                0.19535969338710996,
+                0.11247559500837986,
+                0.07814387735484399,
+                0.10466528521563906
+              ],
+              "quantum_state_size": 64,
+              "gates_applied": 8,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00015974044799804688,
+              "optimization_speedup": 1.0,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 4
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 16,
+                "hit_rate": 0.5897435897435898,
+                "size": 16,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 9,
+                "completed_tasks": 7,
+                "total_tasks": 16,
+                "utilization": 1.5,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 4,
+              "optimized_depth": 3,
+              "speedup": 1.3333333333333333,
+              "optimization_time": 3.6716461181640625e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.18536115554035557,
+                0.23975192881692584,
+                0.18349818207162374,
+                0.09930850052107958,
+                0.18536115554035557,
+                0.1067190775096597
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 6,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00022649765014648438,
+              "optimization_speedup": 1.3333333333333333,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 20,
+                "hit_rate": 0.5348837209302325,
+                "size": 20,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 9,
+                "completed_tasks": 7,
+                "total_tasks": 16,
+                "utilization": 1.5,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 3,
+                  "target": 4,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 4
+                },
+                {
+                  "control": 3,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 3,
+                  "target": 4,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 4
+                },
+                {
+                  "control": 3,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 6,
+              "optimized_depth": 5,
+              "speedup": 1.2,
+              "optimization_time": 4.673004150390625e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.12862112581226012,
+                0.12732841837197612,
+                0.12732841837197612,
+                0.16636259582110877,
+                0.1273284183719761,
+                0.06890964346069685,
+                0.05144845032490405,
+                0.07405180365284178,
+                0.1286211258122601
+              ],
+              "quantum_state_size": 32,
+              "gates_applied": 9,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.0003299713134765625,
+              "optimization_speedup": 1.2,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 22,
+                "hit_rate": 0.5111111111111111,
+                "size": 22,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 9,
+                "completed_tasks": 7,
+                "total_tasks": 16,
+                "utilization": 1.5,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                }
+              ],
+              "original_depth": 3,
+              "optimized_depth": 3,
+              "speedup": 1.0,
+              "optimization_time": 3.552436828613281e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.1571948637113728,
+                0.2261600188734553,
+                0.25406526650973,
+                0.20538498719406917,
+                0.1571948637113728
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 5,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00017213821411132812,
+              "optimization_speedup": 1.0,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 3
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 10,
+                "hit_rate": 0.696969696969697,
+                "size": 10,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 8,
+                "completed_tasks": 8,
+                "total_tasks": 16,
+                "utilization": 1.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 9,
+              "optimized_depth": 6,
+              "speedup": 1.5,
+              "optimization_time": 0.00010466575622558594,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.17980756741234186,
+                0.17980756741234186,
+                0.17980756741234186,
+                0.2586934577851811,
+                0.09731115426033383,
+                0.10457268571745951
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 6,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00029206275939941406,
+              "optimization_speedup": 1.5,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 26,
+                "hit_rate": 0.46938775510204084,
+                "size": 26,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 8,
+                "completed_tasks": 8,
+                "total_tasks": 16,
+                "utilization": 1.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                }
+              ],
+              "original_depth": 7,
+              "optimized_depth": 5,
+              "speedup": 1.4,
+              "optimization_time": 4.792213439941406e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.25348881138922386,
+                0.10499850358725202,
+                0.25348881138922386,
+                0.19401193681715012,
+                0.19401193681715012
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 5,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00022339820861816406,
+              "optimization_speedup": 1.4,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 5
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 18,
+                "hit_rate": 0.5609756097560976,
+                "size": 18,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 8,
+                "completed_tasks": 8,
+                "total_tasks": 16,
+                "utilization": 1.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "control": 2,
+                  "target": 3,
+                  "type": "cnot"
+                },
+                {
+                  "control": 1,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "control": 2,
+                  "target": 3,
+                  "type": "cnot"
+                },
+                {
+                  "control": 1,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 9,
+              "optimized_depth": 5,
+              "speedup": 1.8,
+              "optimization_time": 0.00017118453979492188,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.08897421420388897,
+                0.23653040908903977,
+                0.1644029108484961,
+                0.23653040908903977,
+                1.4236569631199906e-17,
+                0.08897421420388897,
+                0.08897421420388898,
+                0.0956136283617574
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 8,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00034332275390625,
+              "optimization_speedup": 1.8,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 28,
+                "hit_rate": 0.45098039215686275,
+                "size": 28,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 8,
+                "completed_tasks": 8,
+                "total_tasks": 16,
+                "utilization": 1.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 0,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 0,
+                  "type": "cnot"
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                }
+              ],
+              "original_depth": 3,
+              "optimized_depth": 2,
+              "speedup": 1.5,
+              "optimization_time": 3.695487976074219e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.2351031464292354,
+                0.33484896390027913,
+                0.3040897790209644,
+                0.12595811064952092
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 4,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00014972686767578125,
+              "optimization_speedup": 1.5,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 3
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 12,
+                "hit_rate": 0.6571428571428571,
+                "size": 12,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 8,
+                "completed_tasks": 8,
+                "total_tasks": 16,
+                "utilization": 1.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 5,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 5
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 5,
+                  "target": 4,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 1
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 1,
+                  "target": 5,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 5
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 5,
+                  "target": 4,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 1
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 4,
+              "optimized_depth": 3,
+              "speedup": 1.3333333333333333,
+              "optimization_time": 4.410743713378906e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.17344272631482288,
+                0.249536208313058,
+                0.22661384273013696,
+                0.249536208313058,
+                1.5019377926231605e-17,
+                0.10087101432892409
+              ],
+              "quantum_state_size": 64,
+              "gates_applied": 6,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00023102760314941406,
+              "optimization_speedup": 1.3333333333333333,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 24,
+                "hit_rate": 0.48936170212765956,
+                "size": 24,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 6,
+                "completed_tasks": 10,
+                "total_tasks": 16,
+                "utilization": 1.0,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 15.8
+            }
+          }
+        ]
+      },
+      {
+        "batch_id": 2,
+        "circuits_processed": 10,
+        "results": [
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                }
+              ],
+              "original_depth": 3,
+              "optimized_depth": 3,
+              "speedup": 1.0,
+              "optimization_time": 3.337860107421875e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.26898384310155443,
+                0.3831040227935909,
+                2.3058714173367072e-17,
+                0.3479121341048547
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 4,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00015044212341308594,
+              "optimization_speedup": 1.0,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 32,
+                "hit_rate": 0.41818181818181815,
+                "size": 32,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 10,
+                "completed_tasks": 16,
+                "total_tasks": 26,
+                "utilization": 1.6666666666666667,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 16.6
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 4,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 5,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 5,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 5,
+                  "original_target": 1
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 4,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 5,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 5,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 5,
+                  "original_target": 1
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 2,
+              "optimized_depth": 2,
+              "speedup": 1.0,
+              "optimization_time": 7.152557373046875e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.16245277915632847,
+                0.16082004646965664,
+                0.25992444665012554,
+                0.16082004646965664,
+                0.16245277915632847,
+                0.09352990209790418
+              ],
+              "quantum_state_size": 64,
+              "gates_applied": 6,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.0001862049102783203,
+              "optimization_speedup": 1.0,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 36,
+                "hit_rate": 0.3898305084745763,
+                "size": 36,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 9,
+                "completed_tasks": 17,
+                "total_tasks": 26,
+                "utilization": 1.5,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.2
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 6,
+              "optimized_depth": 4,
+              "speedup": 1.5,
+              "optimization_time": 3.600120544433594e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.20750600496828592,
+                0.2683947712087386,
+                0.20542046455000615,
+                0.11117275430468343,
+                0.20750600496828592
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 5,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00015997886657714844,
+              "optimization_speedup": 1.5,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 38,
+                "hit_rate": 0.3770491803278688,
+                "size": 38,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 8,
+                "completed_tasks": 18,
+                "total_tasks": 26,
+                "utilization": 1.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.4
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 3,
+              "optimized_depth": 3,
+              "speedup": 1.0,
+              "optimization_time": 2.6702880859375e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.3189022816776702,
+                0.17085406763805733,
+                0.5102436506842724
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 3,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00014853477478027344,
+              "optimization_speedup": 1.0,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 30,
+                "hit_rate": 0.4339622641509434,
+                "size": 30,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 9,
+                "completed_tasks": 17,
+                "total_tasks": 26,
+                "utilization": 1.5,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.0
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 4,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 4
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 4,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 4
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                }
+              ],
+              "original_depth": 6,
+              "optimized_depth": 5,
+              "speedup": 1.2,
+              "optimization_time": 0.00015282630920410156,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.14026685431372954,
+                0.20180528593580363,
+                0.1402668543137295,
+                0.20180528593580363,
+                1.2146493198207571e-17,
+                0.1832674770460292,
+                0.056676367920539254,
+                1.2146493198207571e-17,
+                0.0759118745343652
+              ],
+              "quantum_state_size": 32,
+              "gates_applied": 9,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00032067298889160156,
+              "optimization_speedup": 1.2,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 42,
+                "hit_rate": 0.35384615384615387,
+                "size": 42,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 6,
+                "completed_tasks": 20,
+                "total_tasks": 26,
+                "utilization": 1.0,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 0
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 0
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                }
+              ],
+              "original_depth": 4,
+              "optimized_depth": 3,
+              "speedup": 1.3333333333333333,
+              "optimization_time": 3.600120544433594e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.39592885380493337,
+                0.21212157784502683,
+                0.3919495683500398
+              ],
+              "quantum_state_size": 32,
+              "gates_applied": 3,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00013828277587890625,
+              "optimization_speedup": 1.3333333333333333,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 34,
+                "hit_rate": 0.40350877192982454,
+                "size": 34,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 5,
+                "completed_tasks": 21,
+                "total_tasks": 26,
+                "utilization": 0.8333333333333334,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 6,
+              "optimized_depth": 5,
+              "speedup": 1.2,
+              "optimization_time": 0.00010848045349121094,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.1936305398708003,
+                0.2529904922642063,
+                0.10479209304727984,
+                0.2529904922642063,
+                0.19559638255350723
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 5,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.0002570152282714844,
+              "optimization_speedup": 1.2,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 46,
+                "hit_rate": 0.3333333333333333,
+                "size": 46,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 4,
+                "completed_tasks": 22,
+                "total_tasks": 26,
+                "utilization": 0.6666666666666666,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 1,
+                  "target": 5,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 5
+                },
+                {
+                  "qubit": 5,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 4,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 0
+                },
+                {
+                  "control": 4,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "control": 5,
+                  "target": 4,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 4
+                },
+                {
+                  "control": 0,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 3
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 1,
+                  "target": 5,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 5
+                },
+                {
+                  "qubit": 5,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 4,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 0
+                },
+                {
+                  "control": 4,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 0
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "control": 5,
+                  "target": 4,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 4
+                },
+                {
+                  "control": 0,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 3
+                }
+              ],
+              "original_depth": 7,
+              "optimized_depth": 6,
+              "speedup": 1.1666666666666667,
+              "optimization_time": 5.054473876953125e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.12429178150931153,
+                0.1242917815093115,
+                0.20088585497369355,
+                1.0763122093828701e-17,
+                1.0763122093828701e-17,
+                0.12429178150931153,
+                0.16239503855857287,
+                0.07228575299742494,
+                0.1242917815093115,
+                0.0672662274330626
+              ],
+              "quantum_state_size": 64,
+              "gates_applied": 10,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.0002281665802001953,
+              "optimization_speedup": 1.1666666666666667,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 44,
+                "hit_rate": 0.34328358208955223,
+                "size": 44,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 3,
+                "completed_tasks": 23,
+                "total_tasks": 26,
+                "utilization": 0.5,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 0,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 1
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 3,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 1
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 0,
+                  "type": "cnot"
+                },
+                {
+                  "control": 3,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 1
+                },
+                {
+                  "control": 2,
+                  "target": 3,
+                  "type": "cnot"
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 1,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 3,
+                  "original_target": 1
+                }
+              ],
+              "original_depth": 9,
+              "optimized_depth": 7,
+              "speedup": 1.2857142857142858,
+              "optimization_time": 4.76837158203125e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.17346219393392123,
+                0.24705597010002428,
+                0.2243614388960746,
+                1.4870094440197782e-17,
+                0.09293355086429654,
+                0.09293355086429654,
+                0.0693848775735685,
+                0.0998684177678182,
+                1.4870094440197782e-17
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 9,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.0003299713134765625,
+              "optimization_speedup": 1.2857142857142858,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 48,
+                "hit_rate": 0.323943661971831,
+                "size": 48,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 2,
+                "completed_tasks": 24,
+                "total_tasks": 26,
+                "utilization": 0.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 2,
+                  "type": "cnot"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 3,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 3
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 2,
+                  "type": "cnot"
+                }
+              ],
+              "original_depth": 5,
+              "optimized_depth": 4,
+              "speedup": 1.25,
+              "optimization_time": 4.00543212890625e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.1950950643037235,
+                0.19313426012326382,
+                0.3121521028859576,
+                1.6724578222030143e-17,
+                0.1950950643037235,
+                0.10452350838333153
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 6,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00014972686767578125,
+              "optimization_speedup": 1.25,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 40,
+                "hit_rate": 0.36507936507936506,
+                "size": 40,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 2,
+                "completed_tasks": 24,
+                "total_tasks": 26,
+                "utilization": 0.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 17.8
+            }
+          }
+        ]
+      },
+      {
+        "batch_id": 3,
+        "circuits_processed": 10,
+        "results": [
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 4,
+              "optimized_depth": 3,
+              "speedup": 1.3333333333333333,
+              "optimization_time": 4.00543212890625e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.171403437836523,
+                0.31671225603846853,
+                0.5118843061250085
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 3,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00019502639770507812,
+              "optimization_speedup": 1.3333333333333333,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 50,
+                "hit_rate": 0.3150684931506849,
+                "size": 50,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 10,
+                "completed_tasks": 26,
+                "total_tasks": 36,
+                "utilization": 1.6666666666666667,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 18.0
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                }
+              ],
+              "original_depth": 5,
+              "optimized_depth": 3,
+              "speedup": 1.6666666666666667,
+              "optimization_time": 3.409385681152344e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.22528997208544044,
+                0.32413008374367863,
+                0.22528997208544044,
+                0.22528997208544044
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 4,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00014638900756835938,
+              "optimization_speedup": 1.6666666666666667,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 52,
+                "hit_rate": 0.30666666666666664,
+                "size": 52,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 9,
+                "completed_tasks": 27,
+                "total_tasks": 36,
+                "utilization": 1.5,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 18.2
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 4,
+              "optimized_depth": 1,
+              "speedup": 4.0,
+              "optimization_time": 2.3603439331054688e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.24849263938091323,
+                0.35391913760962546,
+                0.3975882230094612
+              ],
+              "quantum_state_size": 32,
+              "gates_applied": 3,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00010013580322265625,
+              "optimization_speedup": 4.0,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 54,
+                "hit_rate": 0.2987012987012987,
+                "size": 54,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 8,
+                "completed_tasks": 28,
+                "total_tasks": 36,
+                "utilization": 1.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 18.4
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 5,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 5
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 5,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "qubit": 5,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 5,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 5
+                },
+                {
+                  "control": 1,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 4
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 1,
+                  "target": 5,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 5
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 2
+                },
+                {
+                  "control": 1,
+                  "target": 5,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 5
+                },
+                {
+                  "control": 1,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 4
+                }
+              ],
+              "original_depth": 5,
+              "optimized_depth": 3,
+              "speedup": 1.6666666666666667,
+              "optimization_time": 0.0001049041748046875,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.16378392528005703,
+                0.16213781390083074,
+                0.26205428044809126,
+                0.1621378139008308,
+                0.16213781390083074,
+                0.08774835256935945
+              ],
+              "quantum_state_size": 64,
+              "gates_applied": 6,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.0002148151397705078,
+              "optimization_speedup": 1.6666666666666667,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 56,
+                "hit_rate": 0.2911392405063291,
+                "size": 56,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 7,
+                "completed_tasks": 29,
+                "total_tasks": 36,
+                "utilization": 1.1666666666666667,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 18.6
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 4,
+              "optimized_depth": 1,
+              "speedup": 4.0,
+              "optimization_time": 3.0040740966796875e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                1.0
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 1,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00014352798461914062,
+              "optimization_speedup": 4.0,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 58,
+                "hit_rate": 0.2839506172839506,
+                "size": 58,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 6,
+                "completed_tasks": 30,
+                "total_tasks": 36,
+                "utilization": 1.0,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 18.8
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 5,
+              "optimized_depth": 4,
+              "speedup": 1.25,
+              "optimization_time": 3.123283386230469e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.22631377171379222,
+                0.32560304881266344,
+                0.12248013066088105,
+                0.32560304881266344
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 4,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00019359588623046875,
+              "optimization_speedup": 1.25,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 60,
+                "hit_rate": 0.27710843373493976,
+                "size": 60,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 5,
+                "completed_tasks": 31,
+                "total_tasks": 36,
+                "utilization": 0.8333333333333334,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 19.0
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 1,
+                  "target": 0,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 4,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 4
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 1,
+                  "target": 0,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 4
+                }
+              ],
+              "original_depth": 5,
+              "optimized_depth": 4,
+              "speedup": 1.25,
+              "optimization_time": 3.8623809814453125e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.24108939720546096,
+                0.2654759891026324,
+                0.0998624980668561,
+                0.09986249806685608,
+                0.1863952022202756,
+                0.1073144153379188,
+                1.597878014428389e-17
+              ],
+              "quantum_state_size": 32,
+              "gates_applied": 7,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00015211105346679688,
+              "optimization_speedup": 1.25,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 62,
+                "hit_rate": 0.27058823529411763,
+                "size": 62,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 4,
+                "completed_tasks": 32,
+                "total_tasks": 36,
+                "utilization": 0.6666666666666666,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 19.2
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 4
+                },
+                {
+                  "control": 1,
+                  "target": 0,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 5,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 5,
+                  "original_target": 2
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "control": 1,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 4
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 4,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 0,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 0,
+                  "original_target": 4
+                },
+                {
+                  "control": 1,
+                  "target": 0,
+                  "type": "cnot"
+                },
+                {
+                  "control": 5,
+                  "target": 2,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 5,
+                  "original_target": 2
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "control": 1,
+                  "target": 4,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 1,
+                  "original_target": 4
+                },
+                {
+                  "control": 4,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 4,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 6,
+              "optimized_depth": 4,
+              "speedup": 1.5,
+              "optimization_time": 3.933906555175781e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                2.1123047634932296e-17,
+                0.3187066081054897,
+                0.3187066081054897,
+                0.1320125994952208,
+                0.1320125994952208,
+                2.1123047634932296e-17,
+                0.09856158479857907
+              ],
+              "quantum_state_size": 64,
+              "gates_applied": 7,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00017333030700683594,
+              "optimization_speedup": 1.5,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 64,
+                "hit_rate": 0.26436781609195403,
+                "size": 64,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 3,
+                "completed_tasks": 33,
+                "total_tasks": 36,
+                "utilization": 0.5,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 19.4
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 0,
+                  "type": "cnot",
+                  "routing_optimized": true,
+                  "original_control": 2,
+                  "original_target": 0
+                },
+                {
+                  "control": 0,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                }
+              ],
+              "original_depth": 11,
+              "optimized_depth": 6,
+              "speedup": 1.8333333333333333,
+              "optimization_time": 4.9591064453125e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.12658854432714622,
+                0.18212597344628975,
+                0.16539590379546076,
+                0.16539590379546076,
+                0.12658854432714622,
+                0.16539590379546076,
+                0.06850922651303552
+              ],
+              "quantum_state_size": 8,
+              "gates_applied": 7,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.0002353191375732422,
+              "optimization_speedup": 1.8333333333333333,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 66,
+                "hit_rate": 0.25842696629213485,
+                "size": 66,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 2,
+                "completed_tasks": 34,
+                "total_tasks": 36,
+                "utilization": 0.3333333333333333,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 19.6
+            }
+          },
+          {
+            "circuit_optimization": {
+              "original_gates": [
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 1,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                }
+              ],
+              "optimized_gates": [
+                {
+                  "qubit": 0,
+                  "type": "hadamard"
+                },
+                {
+                  "control": 2,
+                  "target": 1,
+                  "type": "cnot"
+                },
+                {
+                  "control": 3,
+                  "target": 2,
+                  "type": "cnot"
+                },
+                {
+                  "qubit": 2,
+                  "type": "hadamard"
+                },
+                {
+                  "qubit": 3,
+                  "type": "hadamard"
+                }
+              ],
+              "original_depth": 8,
+              "optimized_depth": 3,
+              "speedup": 2.6666666666666665,
+              "optimization_time": 3.600120544433594e-05,
+              "optimizations_applied": [
+                "redundant_gate_removal",
+                "gate_fusion",
+                "qubit_routing_optimization"
+              ]
+            },
+            "execution_results": {
+              "measurements": [
+                0.2224309277117322,
+                0.11916888323322758,
+                0.11916888323322755,
+                0.31680037811008055,
+                0.2224309277117322
+              ],
+              "quantum_state_size": 16,
+              "gates_applied": 5,
+              "from_cache": false
+            },
+            "performance_metrics": {
+              "total_execution_time": 0.00012993812561035156,
+              "optimization_speedup": 2.6666666666666665,
+              "cache_hit": false,
+              "parallel_execution": false,
+              "workers_used": 6
+            },
+            "scalability_metrics": {
+              "cache_stats": {
+                "hits": 23,
+                "misses": 68,
+                "hit_rate": 0.25274725274725274,
+                "size": 68,
+                "max_size": 500,
+                "evictions": 0
+              },
+              "worker_pool_stats": {
+                "current_workers": 6,
+                "active_tasks": 1,
+                "completed_tasks": 35,
+                "total_tasks": 36,
+                "utilization": 0.16666666666666666,
+                "performance_metrics": {
+                  "avg_execution_time": 0.0,
+                  "avg_memory_usage_mb": 0.0,
+                  "avg_cache_hit_rate": 0.0,
+                  "avg_throughput_ops_per_sec": 0.0,
+                  "total_operations": 0,
+                  "uptime_seconds": 0.0
+                }
+              },
+              "memory_usage_mb": 19.8
+            }
+          }
+        ]
+      }
+    ],
+    "performance_metrics": {
+      "avg_execution_time": 0.00021702177981112867,
+      "avg_memory_usage_mb": 0.0,
+      "avg_cache_hit_rate": 0.5001685353788358,
+      "avg_throughput_ops_per_sec": 0.0,
+      "total_operations": 47,
+      "uptime_seconds": 0.021946191787719727
+    },
+    "resource_utilization": {
+      "final_memory_usage_mb": 19.8,
+      "peak_workers": 6,
+      "cache_efficiency": 0.25274725274725274,
+      "memory_optimizations_triggered": 0
+    }
+  },
+  "comprehensive_engine_stats": {
+    "engine_stats": {
+      "total_computations": 47,
+      "cache_hits": 0,
+      "optimizations_applied": 0,
+      "memory_optimizations": 0,
+      "auto_scale_events": 0
+    },
+    "cache_performance": {
+      "hits": 23,
+      "misses": 68,
+      "hit_rate": 0.25274725274725274,
+      "size": 68,
+      "max_size": 500,
+      "evictions": 0
+    },
+    "worker_pool_stats": {
+      "current_workers": 6,
+      "active_tasks": 0,
+      "completed_tasks": 36,
+      "total_tasks": 36,
+      "utilization": 0.0,
+      "performance_metrics": {
+        "avg_execution_time": 0.0,
+        "avg_memory_usage_mb": 0.0,
+        "avg_cache_hit_rate": 0.0,
+        "avg_throughput_ops_per_sec": 0.0,
+        "total_operations": 0,
+        "uptime_seconds": 0.0
+      }
+    },
+    "performance_metrics": {
+      "avg_execution_time": 0.00021702177981112867,
+      "avg_memory_usage_mb": 0.0,
+      "avg_cache_hit_rate": 0.5001685353788358,
+      "avg_throughput_ops_per_sec": 0.0,
+      "total_operations": 47,
+      "uptime_seconds": 0.022089004516601562
+    },
+    "optimization_stats": {
+      "optimizations_applied": 34,
+      "circuits_optimized": 34,
+      "average_speedup": 1.563795518207283
+    },
+    "resource_usage": {
+      "current_memory_mb": 19.8,
+      "memory_limit_mb": 256,
+      "memory_utilization": 0.07734375
+    }
+  },
+  "research_impact_assessment": {
+    "computational_breakthrough": false,
+    "production_scalability": false,
+    "memory_efficiency": true,
+    "cache_effectiveness": false,
+    "real_time_capability": true
+  },
+  "production_readiness": {
+    "high_performance_achieved": false,
+    "memory_efficient": true,
+    "cache_optimized": false,
+    "scalable_architecture": false,
+    "production_deployment_ready": false
+  }
+}
