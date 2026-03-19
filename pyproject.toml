@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "spatial-omics-gfm"
+version = "0.1.0"
+description = "Graph Foundation Model for Spatial Transcriptomics"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [{name = "Daniel Schmidt"}]
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.0",
+    "numpy>=1.24",
+    "scikit-learn>=1.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pytest-cov"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["spatial_omics_gfm*"]
